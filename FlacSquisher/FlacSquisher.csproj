@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<ApplicationIcon>Resources\FlacSquisherIcon.ico</ApplicationIcon>
+		<StartupObject>FlacSquisher.App</StartupObject>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<Version>2.0.1.0</Version>
+		<Copyright>2020 Markus Karl Wackermann</Copyright>
+		<Description>FlacSquisher converts a library of Flac files to MP3, Opus, or Ogg Vorbis format, maintaining the directory structure in the original library. That way, you can maintain your Flac files for home listening, and easily convert them to MP3, Opus, or Ogg format for mobile use, where storage space is more often tightly constrained.</Description>
+		<Authors>UNHchabo, Markus Karl Wackermann</Authors>
+		<PackageProjectUrl>https://github.com/spreedated/flacsquisher</PackageProjectUrl>
+		<PackageIcon>FlacSquisherIcon512_no_letters.png</PackageIcon>
+		<UseWPF>true</UseWPF>
+		<UseWindowsForms>true</UseWindowsForms>
+		<RepositoryUrl>https://github.com/spreedated/flacsquisher</RepositoryUrl>
+		<RepositoryType>GIT</RepositoryType>
+		<PackageTags>flac,mp3,convert,multicore,ogg,lossless</PackageTags>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<ErrorReport>prompt</ErrorReport>
+		<DebugType>none</DebugType>
+		<DebugSymbols>false</DebugSymbols>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<DebugType>full</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="Resources\FlacSquisherIcon.ico" />
+		<None Remove="Resources\FlacSquisherIcon512_no_letters.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Resources\FlacSquisherIcon.ico" />
+		<Resource Include="Resources\FlacSquisherIcon512_no_letters.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Properties\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Costura.Fody" Version="4.1.0" />
+		<PackageReference Include="Fody" Version="6.2.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="NAudio.Flac" Version="1.0.5702.29018" />
+		<PackageReference Include="NAudio.Lame" Version="1.1.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+		<PackageReference Include="Serilog" Version="2.9.0" />
+		<PackageReference Include="Serilog.Sinks.Debug" Version="1.0.1" />
+	</ItemGroup>
+
+</Project>

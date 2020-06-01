@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FlacSquisher": {
+      "commandName": "Project",
+      "sqlDebugging": false
+    }
+  }
+}

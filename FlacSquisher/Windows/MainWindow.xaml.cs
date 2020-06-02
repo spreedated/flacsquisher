@@ -30,8 +30,9 @@ namespace FlacSquisher
         public MainWindow()
         {
             InitializeComponent();
-            InitGUI();
             Log.Logger = new LoggerConfiguration().WriteTo.Debug().CreateLogger();
+            InitGUI();
+            //TODO: InitConfig() - JSON
         }
         private void InitGUI()
         {
@@ -82,6 +83,12 @@ namespace FlacSquisher
                 case Encode.AudioEncoders.WAVE:
                     Encode.WAVE w = new Encode.WAVE(TXT_FLACDirectory.Text, TXT_OutputDirectory.Text);
                     await w.Process();
+                    break;
+                case Encode.AudioEncoders.OGG:
+                    MessageBox.Show("Sorry, vorbis is not yet implemented, check for updates!", "Not yet implemented :(", MessageBoxButton.OK);
+                    break;
+                case Encode.AudioEncoders.OPUS:
+                    MessageBox.Show("Sorry, vorbis is not yet implemented, check for updates!", "Not yet implemented :(", MessageBoxButton.OK);
                     break;
                 default:
                     Debug.Print("Unknown Encoder selected");

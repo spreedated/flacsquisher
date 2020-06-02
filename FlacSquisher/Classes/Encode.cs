@@ -1,16 +1,14 @@
-﻿using System;
+﻿using HeyRed.Mime;
+using NAudio.Flac;
+using NAudio.Lame;
+using Serilog;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using NAudio;
-using NAudio.Flac;
-using NAudio.Lame;
-using System.ComponentModel;
-using Serilog;
 
 namespace FlacSquisher
 {
@@ -20,10 +18,12 @@ namespace FlacSquisher
         {
             [Description("MP3 (LAME Encoder)")]
             MP3 = 0,
+            [Description("WAVE")]
+            WAVE,
             [Description("OGG (OggEn2)")]
             OGG,
-            [Description("WAVE")]
-            WAVE
+            [Description("OPUS")]
+            OPUS,
         }
         public class MP3
         {
@@ -59,7 +59,8 @@ namespace FlacSquisher
                 this.InputPath = inputPath;
                 this.OutputPath = outputPath;
 
-                LConfig = new LameConfig() { 
+                LConfig = new LameConfig()
+                {
                     BitRate = Convert.ToInt32(this.Bitrate.GetEnumDescription()),
                     Analysis = true,
                     Mode = mPEGMode
@@ -67,26 +68,53 @@ namespace FlacSquisher
             }
             public Task Process()
             {
-                Task t = new Task(()=> {
+                Task t = new Task(() =>
+                {
                     int fCount = Directory.GetFiles(this.InputPath, "*.flac").Length;
 
                     //Conversion
                     List<Task> tasks = new List<Task>();
                     foreach (string flacFile in Directory.GetFiles(this.InputPath, "*.flac"))
                     {
-                        Task t = new Task(() => {
+                        Task t = new Task(() =>
+                        {
                             Stopwatch sWatch = new Stopwatch();
                             Log.Information("[Encode][MP3][Process] Processing \"" + Path.GetFileNameWithoutExtension(flacFile) + "\"");
                             sWatch.Start();
-                            using NAudio.Flac.FlacReader flacReader = new FlacReader(flacFile);
                             byte[] flacBuffer;
-                            using (StreamReader streamReader = new StreamReader(flacReader))
+                            using (FlacReader flacReader = new FlacReader(flacFile))
                             {
-                                flacBuffer = new byte[streamReader.BaseStream.Length];
-                                streamReader.BaseStream.Read(flacBuffer, 0, flacBuffer.Length);
+                                using (StreamReader streamReader = new StreamReader(flacReader))
+                                {
+                                    flacBuffer = new byte[streamReader.BaseStream.Length];
+                                    streamReader.BaseStream.Read(flacBuffer, 0, flacBuffer.Length);
+                                }
                             }
+                            
+                            LibFlacSharp.FlacFile r = new LibFlacSharp.FlacFile(flacFile);
+                            LibFlacSharp.Metadata.VorbisComment s = r.VorbisComment;
 
-                            using (NAudio.Lame.LameMP3FileWriter lameMP3FileWriter = new LameMP3FileWriter(Path.Combine(this.OutputPath, Path.GetFileNameWithoutExtension(flacFile) + ".mp3"), new NAudio.Wave.WaveFormat(), LConfig))
+                            LConfig.ID3 = new ID3TagData() {
+                                Artist = s.CommentList.Where(x => x.Key.ToLower().StartsWith("artist")).FirstOrDefault().Value,
+                                AlbumArtist = s.CommentList.Where(x => x.Key.ToLower().Contains("album") && x.Key.ToLower().Contains("artist")).FirstOrDefault().Value,
+                                Album = s.CommentList.Where(x => x.Key.ToLower().StartsWith("album") && x.Key.ToLower().EndsWith("album")).FirstOrDefault().Value,
+                                Title = s.CommentList.Where(x => x.Key.ToLower().StartsWith("title")).FirstOrDefault().Value,
+                                Year = s.CommentList.Where(x => x.Key.ToLower().StartsWith("date")).FirstOrDefault().Value,
+                                Track = s.CommentList.Where(x => x.Key.ToLower().StartsWith("tracknumber")).FirstOrDefault().Value,
+                                Genre = s.CommentList.Where(x => x.Key.ToLower().StartsWith("genre")).FirstOrDefault().Value,
+                                Comment = s.CommentList.Where(x => x.Key.ToLower().Contains("comment")).FirstOrDefault().Value,
+                                AlbumArt = r.Pictures.Count() > 0 ? r.Pictures.Values.ElementAt(0).PictureData : null
+                            };
+                            
+                            //TODO: User defined Tags like, mood, original composer, etc.
+
+                            //TODO: Create a folder.jpg when not found - out of a files embedded picture
+                            //using (FileStream fStream = File.Create(Path.Combine(this.OutputPath, Path.GetFileNameWithoutExtension(flacFile) + "." + MimeTypesMap.GetExtension(r.Pictures.Values.ElementAt(0).MIMEType)), r.Pictures.Values.ElementAt(0).PictureData.Length, FileOptions.SequentialScan))
+                            //{
+                            //    fStream.Write(r.Pictures.Values.ElementAt(0).PictureData, 0, r.Pictures.Values.ElementAt(0).PictureData.Length);
+                            //}
+
+                            using (LameMP3FileWriter lameMP3FileWriter = new LameMP3FileWriter(Path.Combine(this.OutputPath, Path.GetFileNameWithoutExtension(flacFile) + ".mp3"), new NAudio.Wave.WaveFormat(), LConfig))
                             {
                                 using StreamWriter streamWriter = new StreamWriter(lameMP3FileWriter);
                                 lameMP3FileWriter.Write(flacBuffer, 0, flacBuffer.Length);

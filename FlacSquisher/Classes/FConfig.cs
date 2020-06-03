@@ -5,66 +5,78 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Reflection;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Windows.Media.Animation;
 
 namespace FlacSquisher
 {
-    public partial class FConfig
+    public class FSConfigJObject
     {
+        [JsonProperty("linputDirec")]
         public string LastInputDirectory { get; set; }
+        [JsonProperty("loutputDirec")]
         public string LastOutputDirectory { get; set; }
-        public Encode.AudioEncoders LastEncoder { get; set; }
-        public Encode.MP3.Bitrates LastMP3Bitrate { get; set; }
+        [JsonProperty("lencoder")]
+        public Encode.AudioEncoders? LastEncoder { get; set; }
+        [JsonProperty("mp3settings")]
+        public MP3 MP3Settings { get; set; }
+        [JsonProperty("configCreated")]
+        public DateTime ConfigCreated { get; set; }
+        [JsonProperty("configModified")]
+        public DateTime ConfigModified { get; set; }
+
+        public class MP3
+        {
+            [JsonProperty("lMP3Bitrate")]
+            public Encode.MP3.Bitrates? LastMP3Bitrate { get; set; }
+        }
+    }
+
+    public static class FSConfig
+    {
+        public static FSConfigJObject Config { get; set; } = null;
     }
 
     public partial class FConfig
     {
-        private readonly string jsonPath = Path.Combine(Environment.CurrentDirectory, "flacConfig.json");
+        private static readonly string jsonPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "flacConfig.json");
         public FConfig()
         {
-            string json = null;
-
             if (File.Exists(jsonPath))
             {
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-
-                using (FileStream stream = File.Open(jsonPath, FileMode.Open))
+                FConfig.Load();
+            }
+            else
+            {
+                FConfig.Save(); //Save blank/null values
+            }
+        }
+        public static void Load()
+        {
+            string json = null;
+            using (FileStream stream = File.Open(jsonPath, FileMode.Open))
+            {
+                using (StreamReader reader = new StreamReader(stream))
                 {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        while (!reader.EndOfStream)
-                        {
-                            json += System.Text.Encoding.UTF8.GetString(new byte[] { Convert.ToByte(reader.Read()) });
-                        }
-                    }
+                    json += reader.ReadToEnd();
                 }
-
-                stopwatch.Stop();
-                Debug.Print("Time 1: " + stopwatch.Elapsed.ToString(@"hh\:mm\:ss\:ffffff"));
-                stopwatch.Restart();
-                json += File.ReadAllText(jsonPath);
-                Debug.Print("Time 2: " + stopwatch.Elapsed.ToString(@"hh\:mm\:ss\:ffffff"));
-                stopwatch.Restart();
-                using (FileStream stream = File.Open(jsonPath, FileMode.Open))
+            }
+            FSConfig.Config = JsonConvert.DeserializeObject<FSConfigJObject>(json);
+        }
+        public static void Reload()
+        {
+            FSConfig.Config = null;
+            FConfig.Load();
+        }
+        public static void Save()
+        {
+            string jsonOut = JsonConvert.SerializeObject(FSConfig.Config, Formatting.Indented);
+            using (FileStream stream = File.Open(jsonPath, FileMode.OpenOrCreate))
+            {
+                using (StreamWriter writer = new StreamWriter(stream))
                 {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        while (!reader.EndOfStream)
-                        {
-                            json += reader.ReadLine();
-                        }
-                    }
+                    writer.Write(jsonOut);
                 }
-                Debug.Print("Time 3: " + stopwatch.Elapsed.ToString(@"hh\:mm\:ss\:ffffff"));
-                stopwatch.Restart();
-                using (FileStream stream = File.Open(jsonPath, FileMode.Open))
-                {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                            json += reader.ReadToEnd();
-                    }
-                }
-                Debug.Print("Time 4: " + stopwatch.Elapsed.ToString(@"hh\:mm\:ss\:ffffff"));
             }
         }
     }

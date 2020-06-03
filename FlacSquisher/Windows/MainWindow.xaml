@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FlacSquisher"
         mc:Ignorable="d"
-        Title="MainWindow" Height="423" Width="555" MinWidth="555" MinHeight="330" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="423" Width="555" MinWidth="555" MinHeight="330" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     <Grid>
         <GroupBox x:Name="GRP_Directories" Header="Directories" Height="110" Width="410" Margin="10,36,0,0" HorizontalAlignment="Left" d:LayoutOverrides="Width, Height" VerticalAlignment="Top">
             <Grid>

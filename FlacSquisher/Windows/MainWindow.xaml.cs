@@ -27,14 +27,12 @@ namespace FlacSquisher
     /// </summary>
     public partial class MainWindow : Window
     {
-        FConfig FlacSquisherConf = null;
         public MainWindow()
         {
             InitializeComponent();
             Log.Logger = new LoggerConfiguration().WriteTo.Debug().CreateLogger();
             InitGUI();
-            FlacSquisherConf = new FConfig();
-            //TODO: InitConfig() - JSON
+            new FConfig(); //Initialize Config
         }
         private void InitGUI()
         {
@@ -64,6 +62,8 @@ namespace FlacSquisher
                 MessageBox.Show("Paths not valid!\nPlease check Input & Output paths.", "Invalid paths", MessageBoxButton.OK);
                 return;
             }
+
+            
 
             Encode.AudioEncoders selectedEncoder = GetSelectedEncoder();
 
@@ -127,6 +127,15 @@ namespace FlacSquisher
                     acc = acc.Substring(0,acc.LastIndexOf(System.IO.Path.DirectorySeparatorChar));
                     TXT_OutputDirectory.Text = acc;
                 }
+                if (btn.Name.Contains("FLAC"))
+                {
+                    FSConfig.Config.LastInputDirectory = folderBrowser.SelectedPath; //Write to global config
+                }
+                else
+                {
+                    FSConfig.Config.LastOutputDirectory = folderBrowser.SelectedPath; //Write to global config
+                    //TODO: Continue config write
+                }
             }
         }
         #endregion
@@ -152,6 +161,11 @@ namespace FlacSquisher
         private Encode.AudioEncoders GetSelectedEncoder()
         {
             return Enum.GetValues(typeof(Encode.AudioEncoders)).OfType<Encode.AudioEncoders>().Where((x) => { return x.GetEnumDescription().Equals(CMB_Encoder.SelectedItem.ToString()); }).FirstOrDefault();
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            FConfig.Save();
         }
     }
 

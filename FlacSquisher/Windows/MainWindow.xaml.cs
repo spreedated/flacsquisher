@@ -31,8 +31,8 @@ namespace FlacSquisher
         {
             InitializeComponent();
             Log.Logger = new LoggerConfiguration().WriteTo.Debug().CreateLogger();
-            InitGUI();
             new FConfig(); //Initialize Config
+            InitGUI();
         }
         private void InitGUI()
         {
@@ -134,7 +134,6 @@ namespace FlacSquisher
                 else
                 {
                     FSConfig.Config.LastOutputDirectory = folderBrowser.SelectedPath; //Write to global config
-                    //TODO: Continue config write
                 }
             }
         }
@@ -150,22 +149,34 @@ namespace FlacSquisher
                     GRP_LAME_Options.Visibility = Visibility.Visible;
                     break;
                 case Encode.AudioEncoders.OGG:
+                    //TODO: Implement OGG Options
                     break;
-                case Encode.AudioEncoders.WAVE:
+                case Encode.AudioEncoders.OPUS:
+                    //TODO: Implement OPUS Options
                     break;
                 default:
                     break;
             }
+            FSConfig.Config.LastEncoder = GetSelectedEncoder(); //Write to global config
         }
 
         private Encode.AudioEncoders GetSelectedEncoder()
         {
             return Enum.GetValues(typeof(Encode.AudioEncoders)).OfType<Encode.AudioEncoders>().Where((x) => { return x.GetEnumDescription().Equals(CMB_Encoder.SelectedItem.ToString()); }).FirstOrDefault();
         }
+        private Encode.MP3.Bitrates GetSelectedMP3Bitrate()
+        {
+            return Enum.GetValues(typeof(Encode.MP3.Bitrates)).OfType<Encode.MP3.Bitrates>().Where((x) => { return x.GetEnumDescription().Equals(CMB_MP3_Bitrate.SelectedItem.ToString()); }).FirstOrDefault();
+        }
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             FConfig.Save();
+        }
+
+        private void CMB_MP3_Bitrate_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FSConfig.Config.MP3Settings.LastMP3Bitrate = GetSelectedMP3Bitrate();
         }
     }
 

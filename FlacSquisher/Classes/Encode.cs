@@ -84,11 +84,9 @@ namespace FlacSquisher
                             byte[] flacBuffer;
                             using (FlacReader flacReader = new FlacReader(flacFile))
                             {
-                                using (StreamReader streamReader = new StreamReader(flacReader))
-                                {
-                                    flacBuffer = new byte[streamReader.BaseStream.Length];
-                                    streamReader.BaseStream.Read(flacBuffer, 0, flacBuffer.Length);
-                                }
+                                using StreamReader streamReader = new StreamReader(flacReader);
+                                flacBuffer = new byte[streamReader.BaseStream.Length];
+                                streamReader.BaseStream.Read(flacBuffer, 0, flacBuffer.Length);
                             }
                             
                             LibFlacSharp.FlacFile r = new LibFlacSharp.FlacFile(flacFile);
@@ -196,7 +194,8 @@ namespace FlacSquisher
                 return t;
             }
         }
-
+        //TODO: Implement OGG-VORBIS Encoding
+        //TODO: Implement OPUS Encoding
         public static void CopyNonAudioFiles(string inputFolder, string outputFolder)
         {
             foreach (string f in Directory.GetFiles(inputFolder).Where(x => { return !x.EndsWith(".flac"); }))

@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Animation;
+using System.ComponentModel;
+using Serilog;
 
 namespace FlacSquisher
 {
@@ -17,18 +19,17 @@ namespace FlacSquisher
         [JsonProperty("loutputDirec")]
         public string LastOutputDirectory { get; set; }
         [JsonProperty("lencoder")]
-        public Encode.AudioEncoders? LastEncoder { get; set; }
+        public Encode.AudioEncoders LastEncoder { get; set; }
         [JsonProperty("mp3settings")]
-        public MP3 MP3Settings { get; set; }
+        public MP3 MP3Settings { get; set; } = new MP3();
         [JsonProperty("configCreated")]
         public DateTime ConfigCreated { get; set; }
         [JsonProperty("configModified")]
         public DateTime ConfigModified { get; set; }
-
         public class MP3
         {
             [JsonProperty("lMP3Bitrate")]
-            public Encode.MP3.Bitrates? LastMP3Bitrate { get; set; }
+            public Encode.MP3.Bitrates LastMP3Bitrate { get; set; }
         }
     }
 
@@ -40,15 +41,18 @@ namespace FlacSquisher
     public partial class FConfig
     {
         private static readonly string jsonPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "flacConfig.json");
+        public static bool readOnlyFileSystem = false;
         public FConfig()
         {
             if (File.Exists(jsonPath))
             {
+                Log.Information("[FConfig][Entry] Config file found, trying to load...");
                 FConfig.Load();
             }
             else
             {
-                FConfig.Save(); //Save blank/null values
+                Log.Warning("[FConfig][Entry] Config not file found, trying to create blank...");
+                FConfig.Save(true); //Save blank/null values
             }
         }
         public static void Load()
@@ -56,27 +60,57 @@ namespace FlacSquisher
             string json = null;
             using (FileStream stream = File.Open(jsonPath, FileMode.Open))
             {
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    json += reader.ReadToEnd();
-                }
+                using StreamReader reader = new StreamReader(stream);
+                json += reader.ReadToEnd();
             }
-            FSConfig.Config = JsonConvert.DeserializeObject<FSConfigJObject>(json);
+            try
+            {
+                FSConfig.Config = JsonConvert.DeserializeObject<FSConfigJObject>(json);
+                Log.Information("[FConfig][Load] Config loaded successfully!");
+            }
+            catch (Exception ex)
+            {
+                File.Delete(jsonPath);
+                Log.Error(ex, "[FConfig][Load] Error: ");
+                Load();
+            }
         }
         public static void Reload()
         {
-            FSConfig.Config = null;
+            Log.Information("[FConfig][Reload] Reloading...");
+            FSConfig.Config = new FSConfigJObject();
             FConfig.Load();
+            Log.Information("[FConfig][Reload] Reload complete.");
         }
-        public static void Save()
+        public static void Save(bool fresh = false)
         {
-            string jsonOut = JsonConvert.SerializeObject(FSConfig.Config, Formatting.Indented);
-            using (FileStream stream = File.Open(jsonPath, FileMode.OpenOrCreate))
+            if (readOnlyFileSystem)
             {
-                using (StreamWriter writer = new StreamWriter(stream))
+                Log.Information("[FConfig][Save] Filesystem marked readonly, no saves.");
+                return;
+            }
+            Log.Information("[FConfig][Save] Saving...");
+            if (fresh)
+            {
+                Log.Information("[FConfig][Save] Brand new config to save");
+                FSConfig.Config = new FSConfigJObject
                 {
-                    writer.Write(jsonOut);
-                }
+                    ConfigCreated = DateTime.Now
+                };
+            }
+            FSConfig.Config.ConfigModified = DateTime.Now;
+            string jsonOut = JsonConvert.SerializeObject(FSConfig.Config, Formatting.Indented);
+            try
+            {
+                using FileStream stream = File.Open(jsonPath, FileMode.OpenOrCreate);
+                using StreamWriter writer = new StreamWriter(stream);
+                writer.Write(jsonOut);
+                Log.Information("[FConfig][Save] Save successfully!");
+            }
+            catch (Exception ex)
+            {
+                readOnlyFileSystem = true;
+                Log.Error(ex, "[FConfig][Save] Error: ");
             }
         }
     }

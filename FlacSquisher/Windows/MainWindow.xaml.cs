@@ -27,11 +27,13 @@ namespace FlacSquisher
     /// </summary>
     public partial class MainWindow : Window
     {
+        FConfig FlacSquisherConf = null;
         public MainWindow()
         {
             InitializeComponent();
             Log.Logger = new LoggerConfiguration().WriteTo.Debug().CreateLogger();
             InitGUI();
+            FlacSquisherConf = new FConfig();
             //TODO: InitConfig() - JSON
         }
         private void InitGUI()

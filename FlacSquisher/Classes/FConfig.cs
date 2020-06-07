@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Media.Animation;
 using System.ComponentModel;
 using Serilog;
+using System.Windows.Forms;
 
 namespace FlacSquisher
 {
@@ -26,6 +27,8 @@ namespace FlacSquisher
         public DateTime ConfigCreated { get; set; }
         [JsonProperty("configModified")]
         public DateTime ConfigModified { get; set; }
+        [JsonProperty("version")]
+        public Version Version { get; set; } = Assembly.GetExecutingAssembly().GetName().Version;
         public class MP3
         {
             [JsonProperty("lMP3Bitrate")]
@@ -67,11 +70,16 @@ namespace FlacSquisher
             {
                 FSConfig.Config = JsonConvert.DeserializeObject<FSConfigJObject>(json);
                 Log.Information("[FConfig][Load] Config loaded successfully!");
+                if (Convert.ToInt64(FSConfig.Config.Version.ToString().Replace(".","")) < Convert.ToInt64(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", "")))
+                {
+                    throw new VersionMismatchException("Config created with older version.");
+                }
             }
             catch (Exception ex)
             {
                 File.Delete(jsonPath);
                 Log.Error(ex, "[FConfig][Load] Error: ");
+                Save(true);
                 Load();
             }
         }
@@ -115,3 +123,10 @@ namespace FlacSquisher
         }
     }
 }
+
+public class VersionMismatchException : Exception
+{
+    public override string Message { get; }
+    public VersionMismatchException(string message) { this.Message = message; }
+}
+

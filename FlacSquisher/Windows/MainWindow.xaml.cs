@@ -42,7 +42,7 @@ namespace FlacSquisher
             this.Title = sb.ToString();
             sb.Clear();
             Enum.GetValues(typeof(Encode.AudioEncoders)).OfType<Encode.AudioEncoders>().All((x)=> { CMB_Encoder.Items.Add(x.GetEnumDescription()); return true; });
-            Enum.GetValues(typeof(Encode.MP3.Bitrates)).OfType<Encode.MP3.Bitrates>().All((x) => { CMB_MP3_Bitrate.Items.Add(x.GetEnumDescription()); return true; });
+            Enum.GetValues(typeof(Encode.MP3.Bitrates)).OfType<Encode.MP3.Bitrates>().All((x) => { UserC_MP3.CMB_MP3_Bitrate.Items.Add(x.GetEnumDescription()); return true; });
 #if DEBUG
             TXT_FLACDirectory.Text = "C:\\Users\\SpReeD\\Desktop\\fTest\\";
             TXT_OutputDirectory.Text = "C:\\Users\\SpReeD\\Desktop\\fTest\\out\\";
@@ -68,7 +68,7 @@ namespace FlacSquisher
             Encode.AudioEncoders selectedEncoder = GetSelectedEncoder();
 
             CMB_Encoder.IsEnabled = false;
-            CMB_MP3_Bitrate.IsEnabled = false;
+            UserC_MP3.IsEnabled = false;
             BTN_Encode.IsEnabled = false;
             BTN_Exit.IsEnabled = false;
 
@@ -78,7 +78,7 @@ namespace FlacSquisher
             switch (selectedEncoder)
             {
                 case Encode.AudioEncoders.MP3:
-                    Encode.MP3.Bitrates selectedBitrate = Enum.GetValues(typeof(Encode.MP3.Bitrates)).OfType<Encode.MP3.Bitrates>().Where((x) => { return x.GetEnumDescription().Equals(CMB_MP3_Bitrate.SelectedItem.ToString()); }).FirstOrDefault();
+                    Encode.MP3.Bitrates selectedBitrate = Enum.GetValues(typeof(Encode.MP3.Bitrates)).OfType<Encode.MP3.Bitrates>().Where((x) => { return x.GetEnumDescription().Equals(UserC_MP3.CMB_MP3_Bitrate.SelectedItem.ToString()); }).FirstOrDefault();
                     Encode.MP3 k = new Encode.MP3(TXT_FLACDirectory.Text, TXT_OutputDirectory.Text, selectedBitrate);
                     await k.Process();
                     break;
@@ -102,7 +102,7 @@ namespace FlacSquisher
             Log.Information(Microsoft.VisualBasic.Strings.StrDup(25, '+'));
 
             CMB_Encoder.IsEnabled = true;
-            CMB_MP3_Bitrate.IsEnabled = true;
+            UserC_MP3.IsEnabled = true;
             BTN_Encode.IsEnabled = true;
             BTN_Exit.IsEnabled = true;
         }
@@ -141,12 +141,12 @@ namespace FlacSquisher
 
         private void CMB_Encoder_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            GRP_LAME_Options.Visibility = Visibility.Hidden;
+            UserC_MP3.Visibility = Visibility.Hidden;
 
             switch (GetSelectedEncoder())
             {
                 case Encode.AudioEncoders.MP3:
-                    GRP_LAME_Options.Visibility = Visibility.Visible;
+                    UserC_MP3.Visibility = Visibility.Visible;
                     break;
                 case Encode.AudioEncoders.OGG:
                     //TODO: Implement OGG Options
@@ -164,9 +164,9 @@ namespace FlacSquisher
         {
             return Enum.GetValues(typeof(Encode.AudioEncoders)).OfType<Encode.AudioEncoders>().Where((x) => { return x.GetEnumDescription().Equals(CMB_Encoder.SelectedItem.ToString()); }).FirstOrDefault();
         }
-        private Encode.MP3.Bitrates GetSelectedMP3Bitrate()
+        public Encode.MP3.Bitrates GetSelectedMP3Bitrate()
         {
-            return Enum.GetValues(typeof(Encode.MP3.Bitrates)).OfType<Encode.MP3.Bitrates>().Where((x) => { return x.GetEnumDescription().Equals(CMB_MP3_Bitrate.SelectedItem.ToString()); }).FirstOrDefault();
+            return Enum.GetValues(typeof(Encode.MP3.Bitrates)).OfType<Encode.MP3.Bitrates>().Where((x) => { return x.GetEnumDescription().Equals(UserC_MP3.CMB_MP3_Bitrate.SelectedItem.ToString()); }).FirstOrDefault();
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -174,10 +174,7 @@ namespace FlacSquisher
             FConfig.Save();
         }
 
-        private void CMB_MP3_Bitrate_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            FSConfig.Config.MP3Settings.LastMP3Bitrate = GetSelectedMP3Bitrate();
-        }
+        
     }
 
 }

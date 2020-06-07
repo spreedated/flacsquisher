@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FlacSquisher"
+        xmlns:uc="clr-namespace:FlacSquisher.UserControls"
         mc:Ignorable="d"
         Title="MainWindow" Height="423" Width="555" MinWidth="555" MinHeight="330" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     <Grid>
@@ -21,12 +22,11 @@
             <Grid>
                 <Label Content="Encoder" Width="304" Height="20" HorizontalAlignment="Left" Margin="2,2,0,0" d:LayoutOverrides="VerticalAlignment" VerticalAlignment="Top" Padding="0"/>
                 <ComboBox x:Name="CMB_Encoder" Text="" Margin="2,22,0,0" Height="22" d:LayoutOverrides="HorizontalAlignment, Height" VerticalAlignment="Top" HorizontalAlignment="Left" Width="172" SelectedIndex="0" SelectionChanged="CMB_Encoder_SelectionChanged"/>
-                <GroupBox x:Name="GRP_LAME_Options" Header="LAME Options" VerticalAlignment="Top" HorizontalAlignment="Left" Width="386" Margin="2,49,0,0" Height="72">
-                    <Grid>
-                        <Label Content="MP3_Bitrate (kbit/s)" Width="304" Height="20" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" Padding="0" d:LayoutOverrides="VerticalAlignment"/>
-                        <ComboBox x:Name="CMB_MP3_Bitrate" Text="" Margin="5,25,0,0" Height="22" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Top" HorizontalAlignment="Left" Width="172" SelectedIndex="0" SelectionChanged="CMB_MP3_Bitrate_SelectionChanged"/>
-                    </Grid>
-                </GroupBox>
+
+                <!-- UCs -->
+                <uc:UC_MP3 x:Name="UserC_MP3" Margin="0,49,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="124" Width="378" />
+                <!-- # ### # -->
+
             </Grid>
         </GroupBox>
         <Button x:Name="BTN_Encode" Content="Encode !" Height="20" Margin="425,206,0,0" Width="104" HorizontalAlignment="Left" d:LayoutOverrides="Height" VerticalAlignment="Top" Click="BTN_Encode_Click"/>

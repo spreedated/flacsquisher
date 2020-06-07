@@ -4,12 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FlacSquisher.UserControls"
-             mc:Ignorable="d" Height="180" Width="404">
+             mc:Ignorable="d" Height="179" Width="386">
     <Grid>
-        <GroupBox x:Name="GRP_LAME_Options" Header="LAME Options" VerticalAlignment="Top" HorizontalAlignment="Left" Width="386" Margin="10,10,0,0" Height="72">
+        <GroupBox x:Name="GRP_LAME_Options" Header="LAME Options" HorizontalAlignment="Center" Width="366" Margin="0,10,0,34">
             <Grid>
                 <Label Content="MP3_Bitrate (kbit/s)" Width="304" Height="20" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" Padding="0" d:LayoutOverrides="VerticalAlignment"/>
-                <ComboBox x:Name="CMB_MP3_Bitrate" Text="" Margin="5,25,0,0" Height="22" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Top" HorizontalAlignment="Left" Width="172" SelectedIndex="0" SelectionChanged="CMB_MP3_Bitrate_SelectionChanged"/>
+                <ComboBox x:Name="CMB_MP3_Bitrate" Text="" Margin="5,25,0,0" Height="22" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Top" HorizontalAlignment="Left" Width="172" SelectionChanged="CMB_MP3_Bitrate_SelectionChanged"/>
+                <Label Content="Mode" Width="304" Height="20" HorizontalAlignment="Left" Margin="5,56,0,0" VerticalAlignment="Top" Padding="0"/>
+                <ComboBox x:Name="CMB_MP3_Mode" Text="" Margin="5,76,0,0" Height="22" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Top" HorizontalAlignment="Left" Width="172"/>
             </Grid>
         </GroupBox>
     </Grid>

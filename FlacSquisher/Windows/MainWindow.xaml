@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:FlacSquisher"
         xmlns:uc="clr-namespace:FlacSquisher.UserControls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="423" Width="555" MinWidth="555" MinHeight="330" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
-    <Grid>
+        Title="MainWindow" Height="456" Width="685" MinWidth="555" MinHeight="330" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+    <Grid x:Name="MainGrid">
         <GroupBox x:Name="GRP_Directories" Header="Directories" Height="110" Width="410" Margin="10,36,0,0" HorizontalAlignment="Left" d:LayoutOverrides="Width, Height" VerticalAlignment="Top">
             <Grid>
                 <Label Content="FLAC Directory" Width="304" Height="20" HorizontalAlignment="Left" Margin="2,2,0,0" d:LayoutOverrides="VerticalAlignment" VerticalAlignment="Top" Padding="0"/>
@@ -18,19 +18,17 @@
                 <Button x:Name="BTN_Change_OutputDirectory" Content="Change..." Height="20" Margin="311,62,0,0" Width="77" HorizontalAlignment="Left" d:LayoutOverrides="Width, Height" VerticalAlignment="Top" Click="BTN_Change_Directory_Click"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="GRP_EncoderOptions" Header="Encoder Options" Height="216" Width="410" Margin="10,151,0,0" d:LayoutOverrides="Width" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <GroupBox x:Name="GRP_EncoderOptions" Header="Encoder Options" Height="261" Width="410" Margin="10,151,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
             <Grid>
                 <Label Content="Encoder" Width="304" Height="20" HorizontalAlignment="Left" Margin="2,2,0,0" d:LayoutOverrides="VerticalAlignment" VerticalAlignment="Top" Padding="0"/>
-                <ComboBox x:Name="CMB_Encoder" Text="" Margin="2,22,0,0" Height="22" d:LayoutOverrides="HorizontalAlignment, Height" VerticalAlignment="Top" HorizontalAlignment="Left" Width="172" SelectedIndex="0" SelectionChanged="CMB_Encoder_SelectionChanged"/>
-
+                <ComboBox x:Name="CMB_Encoder" Text="" Margin="2,22,0,0" Height="22" d:LayoutOverrides="HorizontalAlignment, Height" VerticalAlignment="Top" HorizontalAlignment="Left" Width="172" SelectionChanged="CMB_Encoder_SelectionChanged"/>
                 <!-- UCs -->
-                <uc:UC_MP3 x:Name="UserC_MP3" Margin="0,49,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="124" Width="378" />
+                <uc:UC_MP3 x:Name="UserC_MP3" Margin="2,49,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="179" Width="386" />
                 <!-- # ### # -->
-
             </Grid>
         </GroupBox>
-        <Button x:Name="BTN_Encode" Content="Encode !" Height="20" Margin="425,206,0,0" Width="104" HorizontalAlignment="Left" d:LayoutOverrides="Height" VerticalAlignment="Top" Click="BTN_Encode_Click"/>
-        <Button x:Name="BTN_Exit" Content="Exit" Height="20" Margin="425,231,0,0" Width="104" HorizontalAlignment="Left" d:LayoutOverrides="Height" VerticalAlignment="Top" Click="BTN_Exit_Click"/>
+        <Button x:Name="BTN_Encode" Content="Encode !" Height="20" Margin="444,175,0,0" Width="104" HorizontalAlignment="Left" d:LayoutOverrides="VerticalAlignment, Height" VerticalAlignment="Top" Click="BTN_Encode_Click"/>
+        <Button x:Name="BTN_Exit" Content="Exit" Height="20" Margin="444,200,0,0" Width="104" HorizontalAlignment="Left" d:LayoutOverrides="Height" VerticalAlignment="Top" Click="BTN_Exit_Click"/>
         <StatusBar Margin="0,0,0,0" Background="Transparent" Height="23" VerticalAlignment="Bottom">
             <StatusBarItem Content="Ready" />
             <Separator Margin="5,5,5,5" Width="1" HorizontalAlignment="Left"/>

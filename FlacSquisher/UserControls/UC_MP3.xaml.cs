@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -18,15 +19,17 @@ namespace FlacSquisher.UserControls
     /// </summary>
     public partial class UC_MP3 : UserControl
     {
-        private MainWindow mainWref;
         public UC_MP3()
         {
             InitializeComponent();
-            //this.mainWref = mainWref;
         }
         private void CMB_MP3_Bitrate_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //FSConfig.Config.MP3Settings.LastMP3Bitrate = mainWref.GetSelectedMP3Bitrate();
+            FSConfig.Config.MP3Settings.LastMP3Bitrate = GetSelectedMP3Bitrate();
+        }
+        private Encode.MP3.Bitrates GetSelectedMP3Bitrate()
+        {
+            return Enum.GetValues(typeof(Encode.MP3.Bitrates)).OfType<Encode.MP3.Bitrates>().Where((x) => { return x.GetEnumDescription().Equals(CMB_MP3_Bitrate.SelectedItem.ToString()); }).FirstOrDefault();
         }
     }
 }

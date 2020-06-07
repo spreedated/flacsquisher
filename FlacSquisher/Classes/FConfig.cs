@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.ComponentModel;
 using Serilog;
 using System.Windows.Forms;
+using NAudio.Lame;
 
 namespace FlacSquisher
 {
@@ -20,24 +21,29 @@ namespace FlacSquisher
         [JsonProperty("loutputDirec")]
         public string LastOutputDirectory { get; set; }
         [JsonProperty("lencoder")]
-        public Encode.AudioEncoders LastEncoder { get; set; }
+        public Encode.AudioEncoders LastEncoder { get; set; } = Encode.AudioEncoders.MP3;
         [JsonProperty("mp3settings")]
         public MP3 MP3Settings { get; set; } = new MP3();
         [JsonProperty("configCreated")]
         public DateTime ConfigCreated { get; set; }
         [JsonProperty("configModified")]
         public DateTime ConfigModified { get; set; }
-        [JsonProperty("version")]
+        [JsonProperty("appVersion")]
         public Version Version { get; set; } = Assembly.GetExecutingAssembly().GetName().Version;
+        [JsonProperty("configVersion")]
+        public Version ConfigVersion { get; set; } = FSConfig.ConfigVersion;
         public class MP3
         {
             [JsonProperty("lMP3Bitrate")]
-            public Encode.MP3.Bitrates LastMP3Bitrate { get; set; }
+            public Encode.MP3.Bitrates LastMP3Bitrate { get; set; } = Encode.MP3.Bitrates._320;
+            [JsonProperty("lMP3Mode")]
+            public MPEGMode LastMP3Mode { get; set; } = MPEGMode.JointStereo;
         }
     }
 
     public static class FSConfig
     {
+        public static Version ConfigVersion = new Version(1, 0, 0, 1);
         public static FSConfigJObject Config { get; set; } = null;
     }
 
@@ -70,9 +76,13 @@ namespace FlacSquisher
             {
                 FSConfig.Config = JsonConvert.DeserializeObject<FSConfigJObject>(json);
                 Log.Information("[FConfig][Load] Config loaded successfully!");
-                if (Convert.ToInt64(FSConfig.Config.Version.ToString().Replace(".","")) < Convert.ToInt64(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", "")))
+                if (FSConfig.Config.Version != Assembly.GetExecutingAssembly().GetName().Version)
                 {
                     throw new VersionMismatchException("Config created with older version.");
+                }
+                if (FSConfig.Config.ConfigVersion != FSConfig.ConfigVersion)
+                {
+                    throw new VersionMismatchException("Config version mismatch");
                 }
             }
             catch (Exception ex)

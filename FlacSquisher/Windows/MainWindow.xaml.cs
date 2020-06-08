@@ -43,17 +43,17 @@ namespace FlacSquisher
             sb.Append(Assembly.GetExecutingAssembly().GetName().Name).Append(" v").Append(myVersion.Major.ToString()).Append(".").Append(myVersion.Minor.ToString()).Append(".").Append(myVersion.Revision.ToString());
             this.Title = sb.ToString();
             sb.Clear();
-            Enum.GetValues(typeof(Encode.AudioEncoders)).OfType<Encode.AudioEncoders>().All((x)=> { CMB_Encoder.Items.Add(x.GetEnumDescription()); return true; });
-            Enum.GetValues(typeof(Encode.MP3.Bitrates)).OfType<Encode.MP3.Bitrates>().All((x) => { UserC_MP3.CMB_MP3_Bitrate.Items.Add(x.GetEnumDescription()); return true; });
-            CMB_Encoder.SelectedIndex = (int)FSConfig.Config.LastEncoder;
             //UserControls
             UserC_MP3.Visibility = Visibility.Hidden;
+            Enum.GetValues(typeof(Encode.MP3.Bitrates)).OfType<Encode.MP3.Bitrates>().All((x) => { UserC_MP3.CMB_MP3_Bitrate.Items.Add(x.GetEnumDescription()); return true; });
             UserC_MP3.CMB_MP3_Bitrate.SelectedIndex = (int)FSConfig.Config.MP3Settings.LastMP3Bitrate;
-            //# ### #
-            TXT_FLACDirectory.Text = FSConfig.Config.LastInputDirectory;
-            TXT_OutputDirectory.Text = FSConfig.Config.LastOutputDirectory;
             Enum.GetNames(typeof(MPEGMode)).All(x => { UserC_MP3.CMB_MP3_Mode.Items.Add(x); return true; });
             UserC_MP3.CMB_MP3_Mode.SelectedIndex = (int)FSConfig.Config.MP3Settings.LastMP3Mode;
+            //# ### #
+            Enum.GetValues(typeof(Encode.AudioEncoders)).OfType<Encode.AudioEncoders>().All((x)=> { CMB_Encoder.Items.Add(x.GetEnumDescription()); return true; });
+            CMB_Encoder.SelectedIndex = (int)FSConfig.Config.LastEncoder;
+            TXT_FLACDirectory.Text = FSConfig.Config.LastInputDirectory;
+            TXT_OutputDirectory.Text = FSConfig.Config.LastOutputDirectory;
 #if DEBUG
             TXT_FLACDirectory.Text = "C:\\Users\\SpReeD\\Desktop\\fTest\\";
             TXT_OutputDirectory.Text = "C:\\Users\\SpReeD\\Desktop\\fTest\\out\\";
@@ -157,6 +157,9 @@ namespace FlacSquisher
                 case Encode.AudioEncoders.MP3:
                     UserC_MP3.Visibility = Visibility.Visible;
                     break;
+                case Encode.AudioEncoders.WAVE:
+                    UserC_WAVE.Visibility = Visibility.Visible;
+                    break;
                 case Encode.AudioEncoders.OGG:
                     //TODO: Implement OGG Options
                     break;
@@ -180,6 +183,7 @@ namespace FlacSquisher
         private void ToggleAllUserControls(bool UCVisibility)
         {
             UserC_MP3.Visibility = UCVisibility ? Visibility.Visible : Visibility.Hidden;
+            UserC_WAVE.Visibility = UCVisibility ? Visibility.Visible : Visibility.Hidden;
         }
         
     }

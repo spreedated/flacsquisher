@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NAudio.Lame;
 
 namespace FlacSquisher.UserControls
 {
@@ -30,6 +31,15 @@ namespace FlacSquisher.UserControls
         private Encode.MP3.Bitrates GetSelectedMP3Bitrate()
         {
             return Enum.GetValues(typeof(Encode.MP3.Bitrates)).OfType<Encode.MP3.Bitrates>().Where((x) => { return x.GetEnumDescription().Equals(CMB_MP3_Bitrate.SelectedItem.ToString()); }).FirstOrDefault();
+        }
+
+        private void CMB_MP3_Mode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FSConfig.Config.MP3Settings.LastMP3Mode = GetSelectedMP3Mode();
+        }
+        private MPEGMode GetSelectedMP3Mode()
+        {
+            return Enum.GetValues(typeof(MPEGMode)).OfType<MPEGMode>().Where((x) => { return x.GetEnumDescription().Equals(CMB_MP3_Mode.SelectedItem.ToString()); }).FirstOrDefault();
         }
     }
 }

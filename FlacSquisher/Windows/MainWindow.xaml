@@ -24,6 +24,7 @@
                 <ComboBox x:Name="CMB_Encoder" Text="" Margin="2,22,0,0" Height="22" d:LayoutOverrides="HorizontalAlignment, Height" VerticalAlignment="Top" HorizontalAlignment="Left" Width="172" SelectionChanged="CMB_Encoder_SelectionChanged"/>
                 <!-- UCs -->
                 <uc:UC_MP3 x:Name="UserC_MP3" Margin="2,49,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="179" Width="386" />
+                <uc:UC_WAVE x:Name="UserC_WAVE" Margin="2,49,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="179" Width="386"/>
                 <!-- # ### # -->
             </Grid>
         </GroupBox>

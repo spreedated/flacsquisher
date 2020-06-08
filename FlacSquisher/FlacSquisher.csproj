@@ -53,6 +53,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="FontAwesome.Sharp" Version="5.13.0" />
 		<PackageReference Include="LibFlacSharp" Version="1.0.4" />
 		<PackageReference Include="MimeTypesMap" Version="1.0.8" />
 		<PackageReference Include="NAudio.Flac" Version="1.0.5702.29018" />

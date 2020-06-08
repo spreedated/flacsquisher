@@ -4,6 +4,37 @@
              xmlns:local="clr-namespace:FlacSquisher"
              StartupUri="Windows/MainWindow.xaml">
     <Application.Resources>
-         
+        <Style x:Key="IconButton" TargetType="{x:Type Button}">
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <SolidColorBrush Color="#333333"/>
+                </Setter.Value>
+            </Setter>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="BBorder" CornerRadius="3" BorderThickness="0.8" BorderBrush="#888888" Background="#DDDDDD">
+                            <Grid>
+                                <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"/>
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <!-- TODO: Stylesheet -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="BBorder" Property="BorderBrush" Value="#AAAAAA" />
+                                <Setter TargetName="BBorder" Property="Background" Value="LightBlue"/>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="OrangeRed" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
 using System.ComponentModel;
-using System.Threading;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace FlacSquisher
 {
@@ -14,7 +11,8 @@ namespace FlacSquisher
     {
         public static Task DoAll(this IEnumerable<Task> x)
         {
-            Task t = new Task(() => {
+            Task t = new Task(() =>
+            {
                 x.All(y => { y.Start(); return true; });
                 Task.WaitAll(x.ToArray());
             });

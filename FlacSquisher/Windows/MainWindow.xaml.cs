@@ -1,27 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NAudio.Lame;
+using Serilog;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using FlacSquisher.UserControls;
-using NAudio.Lame;
-using Serilog;
-using Serilog.Core;
 
 namespace FlacSquisher
 {
@@ -51,7 +40,7 @@ namespace FlacSquisher
             Enum.GetNames(typeof(MPEGMode)).All(x => { UserC_MP3.CMB_MP3_Mode.Items.Add(x); return true; });
             UserC_MP3.CMB_MP3_Mode.SelectedItem = Enum.GetName(typeof(MPEGMode), FSConfig.Config.MP3Settings.LastMP3Mode);
             //# ### #
-            Enum.GetValues(typeof(Encode.AudioEncoders)).OfType<Encode.AudioEncoders>().All((x)=> { CMB_Encoder.Items.Add(x.GetEnumDescription()); return true; });
+            Enum.GetValues(typeof(Encode.AudioEncoders)).OfType<Encode.AudioEncoders>().All((x) => { CMB_Encoder.Items.Add(x.GetEnumDescription()); return true; });
             CMB_Encoder.SelectedIndex = (int)FSConfig.Config.LastEncoder;
             TXT_FLACDirectory.Text = FSConfig.Config.LastInputDirectory;
             TXT_OutputDirectory.Text = FSConfig.Config.LastOutputDirectory;
@@ -91,7 +80,7 @@ namespace FlacSquisher
             {
                 case Encode.AudioEncoders.MP3:
                     Encode.MP3.Bitrates selectedBitrate = Enum.GetValues(typeof(Encode.MP3.Bitrates)).OfType<Encode.MP3.Bitrates>().Where((x) => { return x.GetEnumDescription().Equals(UserC_MP3.CMB_MP3_Bitrate.SelectedItem.ToString()); }).FirstOrDefault();
-                    Encode.MP3 k = new Encode.MP3(TXT_FLACDirectory.Text, TXT_OutputDirectory.Text, selectedBitrate, (MPEGMode)UserC_MP3.CMB_MP3_Mode.SelectedIndex, new Progress<Encode.EncodeProgress>((x)=> { DisplayStatusPerc.Content = x.Percentage.ToString() + "%"; DisplayStatusProgressBar.Value = x.Percentage; }));
+                    Encode.MP3 k = new Encode.MP3(TXT_FLACDirectory.Text, TXT_OutputDirectory.Text, selectedBitrate, (MPEGMode)UserC_MP3.CMB_MP3_Mode.SelectedIndex, new Progress<Encode.EncodeProgress>((x) => { DisplayStatusPerc.Content = x.Percentage.ToString() + "%"; DisplayStatusProgressBar.Value = x.Percentage; }));
                     await k.Process();
                     break;
                 case Encode.AudioEncoders.WAVE:
@@ -109,7 +98,7 @@ namespace FlacSquisher
                     break;
             }
             sWatch.Stop();
-            Log.Information(Microsoft.VisualBasic.Strings.StrDup(25,'+'));
+            Log.Information(Microsoft.VisualBasic.Strings.StrDup(25, '+'));
             Log.Information("[MainWindow][BTN_Encode_Click] Entire processing finished - Duration: " + sWatch.Elapsed.ToString(@"hh\:mm\:ss\:fffffff"));
             Log.Information(Microsoft.VisualBasic.Strings.StrDup(25, '+'));
 
@@ -129,7 +118,7 @@ namespace FlacSquisher
         private void BTN_Change_Directory_Click(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
-            TextBox txtBox = btn.Name.Contains("FLAC")? TXT_FLACDirectory:TXT_OutputDirectory;
+            TextBox txtBox = btn.Name.Contains("FLAC") ? TXT_FLACDirectory : TXT_OutputDirectory;
 
             System.Windows.Forms.FolderBrowserDialog folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             if (Directory.Exists(txtBox.Text))
@@ -143,7 +132,7 @@ namespace FlacSquisher
                 if (btn.Name.Contains("FLAC") && folderBrowser.SelectedPath.TrimEnd(System.IO.Path.PathSeparator).ToLower().EndsWith("flac"))
                 {
                     string acc = folderBrowser.SelectedPath.TrimEnd(System.IO.Path.DirectorySeparatorChar);
-                    acc = acc.Substring(0,acc.LastIndexOf(System.IO.Path.DirectorySeparatorChar));
+                    acc = acc.Substring(0, acc.LastIndexOf(System.IO.Path.DirectorySeparatorChar));
                     TXT_OutputDirectory.Text = acc;
                 }
                 if (btn.Name.Contains("FLAC"))
@@ -195,7 +184,7 @@ namespace FlacSquisher
             UserC_MP3.Visibility = UCVisibility ? Visibility.Visible : Visibility.Hidden;
             UserC_WAVE.Visibility = UCVisibility ? Visibility.Visible : Visibility.Hidden;
         }
-        
+
     }
 
 }

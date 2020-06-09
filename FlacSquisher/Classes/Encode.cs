@@ -1,5 +1,4 @@
-﻿using HeyRed.Mime;
-using NAudio.Flac;
+﻿using NAudio.Flac;
 using NAudio.Lame;
 using Serilog;
 using System;
@@ -64,7 +63,7 @@ namespace FlacSquisher
                 this.InputPath = inputPath;
                 this.OutputPath = outputPath;
                 this.InternalProgress = progress;
-                
+
                 LConfig = new LameConfig()
                 {
                     BitRate = Convert.ToInt32(this.Bitrate.GetEnumDescription()),
@@ -99,11 +98,12 @@ namespace FlacSquisher
                                 flacBuffer = new byte[streamReader.BaseStream.Length];
                                 streamReader.BaseStream.Read(flacBuffer, 0, flacBuffer.Length);
                             }
-                            
+
                             LibFlacSharp.FlacFile r = new LibFlacSharp.FlacFile(flacFile);
                             LibFlacSharp.Metadata.VorbisComment s = r.VorbisComment;
 
-                            LConfig.ID3 = new ID3TagData() {
+                            LConfig.ID3 = new ID3TagData()
+                            {
                                 Artist = s.CommentList.Where(x => x.Key.ToLower().StartsWith("artist")).FirstOrDefault().Value,
                                 AlbumArtist = s.CommentList.Where(x => x.Key.ToLower().Contains("album") && x.Key.ToLower().Contains("artist")).FirstOrDefault().Value,
                                 Album = s.CommentList.Where(x => x.Key.ToLower().StartsWith("album") && x.Key.ToLower().EndsWith("album")).FirstOrDefault().Value,
@@ -114,7 +114,7 @@ namespace FlacSquisher
                                 Comment = s.CommentList.Where(x => x.Key.ToLower().Contains("comment")).FirstOrDefault().Value,
                                 AlbumArt = r.Pictures.Count() > 0 ? r.Pictures.Values.ElementAt(0).PictureData : null
                             };
-                            
+
                             //TODO: User defined Tags like, mood, original composer, etc.
 
                             using (LameMP3FileWriter lameMP3FileWriter = new LameMP3FileWriter(Path.Combine(this.OutputPath, Path.GetFileNameWithoutExtension(flacFile) + ".mp3"), new NAudio.Wave.WaveFormat(), LConfig))

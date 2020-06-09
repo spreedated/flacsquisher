@@ -1,16 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Text;
+﻿using NAudio.Lame;
 using Newtonsoft.Json;
-using System.Reflection;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Windows.Media.Animation;
-using System.ComponentModel;
 using Serilog;
-using System.Windows.Forms;
-using NAudio.Lame;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace FlacSquisher
 {

@@ -34,11 +34,19 @@
                 <Button.Content>
                     <DockPanel>
                         <fa5:IconBlock Icon="SyncAlt" Margin="0,1,5,0"/>
-                        <TextBlock>Encode</TextBlock>
+                        <TextBlock FontWeight="Bold">Encode</TextBlock>
                     </DockPanel>
                 </Button.Content>
             </Button>
-            <Button x:Name="BTN_Exit" Style="{StaticResource FSButton}" Margin="425,162,0,0" Width="82" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BTN_Exit_Click" d:LayoutOverrides="VerticalAlignment">
+            <Button x:Name="BTN_Options" Style="{StaticResource FSButton}" Margin="425,162,0,0" Width="82" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BTN_Options_Click">
+                <Button.Content>
+                    <DockPanel>
+                        <fa5:IconBlock Icon="Cog" Margin="0,1,5,0"/>
+                        <TextBlock>Options</TextBlock>
+                    </DockPanel>
+                </Button.Content>
+            </Button>
+            <Button x:Name="BTN_Exit" Style="{StaticResource FSButton}" Margin="425,195,0,0" Width="82" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BTN_Exit_Click">
                 <Button.Content>
                     <DockPanel>
                         <fa5:IconBlock Icon="SignOutAlt" Margin="0,1,5,0"/>

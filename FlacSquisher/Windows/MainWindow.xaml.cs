@@ -1,4 +1,5 @@
-﻿using NAudio.Lame;
+﻿using FlacSquisher.Windows;
+using NAudio.Lame;
 using Serilog;
 using System;
 using System.ComponentModel;
@@ -26,6 +27,11 @@ namespace FlacSquisher
         }
 
         #region "Buttons"
+        private void BTN_Options_Click(object sender, RoutedEventArgs e)
+        {
+            Options k = new Options();
+            k.ShowDialog();
+        }
         private void BTN_Exit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

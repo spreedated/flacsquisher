@@ -7,29 +7,29 @@
         xmlns:uc="clr-namespace:FlacSquisher.UserControls"
         xmlns:fa5="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="456" Width="685" MinWidth="555" MinHeight="330" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+        Title="MainWindow" Height="475" Width="536" WindowStartupLocation="CenterScreen" Closing="Window_Closing" Padding="0">
     <Grid x:Name="MainGrid">
-        <GroupBox x:Name="GRP_Directories" Header="Directories" Height="110" Width="410" Margin="10,36,0,0" HorizontalAlignment="Left" d:LayoutOverrides="Width, Height" VerticalAlignment="Top">
+        <GroupBox x:Name="GRP_Directories" Header="Directories" Height="110" Width="410" Margin="10,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
             <Grid>
-                <Label Content="FLAC Directory" Width="304" Height="20" HorizontalAlignment="Left" Margin="2,2,0,0" d:LayoutOverrides="VerticalAlignment" VerticalAlignment="Top" Padding="0"/>
-                <TextBox x:Name="TXT_FLACDirectory" Text="" Margin="2,22,0,0" Height="20" d:LayoutOverrides="Height" VerticalAlignment="Top" HorizontalAlignment="Left" Width="351" />
-                <Button x:Name="BTN_Change_FLACDirectory" Content="{fa5:Icon FolderOpen, Foreground=Black}" Height="20" Margin="358,22,0,0" Width="30" HorizontalAlignment="Left" d:LayoutOverrides="Height" VerticalAlignment="Top" Click="BTN_Change_Directory_Click" />
+                <Label Content="FLAC Directory" Width="304" Height="20" HorizontalAlignment="Left" Margin="2,2,0,0" VerticalAlignment="Top" Padding="0"/>
+                <TextBox x:Name="TXT_FLACDirectory" Text="" Margin="2,22,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="351" />
+                <Button x:Name="BTN_Change_FLACDirectory" Style="{StaticResource FSButton}" Content="{fa5:Icon FolderOpen, Foreground=Black}" Height="20" Margin="358,22,0,0" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BTN_Change_Directory_Click" />
                 <Label Content="Output Directory" Width="304" Height="20" HorizontalAlignment="Left" Margin="2,42,0,0" VerticalAlignment="Top" Padding="0"/>
-                <TextBox x:Name="TXT_OutputDirectory" Text="" Margin="2,62,0,0" Height="20" d:LayoutOverrides="Height" VerticalAlignment="Top" HorizontalAlignment="Left" Width="351" />
-                <Button x:Name="BTN_Change_OutputDirectory" Content="{fa5:Icon FolderOpen, Foreground=Black}" Height="20" Margin="358,62,0,0" Width="30" HorizontalAlignment="Left" d:LayoutOverrides="Height" VerticalAlignment="Top" Click="BTN_Change_Directory_Click"/>
+                <TextBox x:Name="TXT_OutputDirectory" Text="" Margin="2,62,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="351" />
+                <Button x:Name="BTN_Change_OutputDirectory" Style="{StaticResource FSButton}" Content="{fa5:Icon FolderOpen, Foreground=Black}" Height="20" Margin="358,62,0,0" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BTN_Change_Directory_Click"/>
             </Grid>
         </GroupBox>
         <GroupBox x:Name="GRP_EncoderOptions" Header="Encoder Options" Height="261" Width="410" Margin="10,151,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
             <Grid>
-                <Label Content="Encoder" Width="304" Height="20" HorizontalAlignment="Left" Margin="2,2,0,0" d:LayoutOverrides="VerticalAlignment" VerticalAlignment="Top" Padding="0"/>
-                <ComboBox x:Name="CMB_Encoder" Text="" Margin="2,22,0,0" Height="22" d:LayoutOverrides="HorizontalAlignment, Height" VerticalAlignment="Top" HorizontalAlignment="Left" Width="172" SelectionChanged="CMB_Encoder_SelectionChanged"/>
+                <Label Content="Encoder" Width="304" Height="20" HorizontalAlignment="Left" Margin="2,2,0,0" VerticalAlignment="Top" Padding="0"/>
+                <ComboBox x:Name="CMB_Encoder" Text="" Margin="2,22,0,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="172" SelectionChanged="CMB_Encoder_SelectionChanged"/>
                 <!-- UCs -->
                 <uc:UC_MP3 x:Name="UserC_MP3" Margin="2,49,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="179" Width="386" />
                 <uc:UC_WAVE x:Name="UserC_WAVE" Margin="2,49,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="179" Width="386"/>
                 <!-- # ### # -->
             </Grid>
         </GroupBox>
-        <Button x:Name="BTN_Encode" Height="20" Margin="444,165,0,0" Width="82" HorizontalAlignment="Left" d:LayoutOverrides="VerticalAlignment, Height" VerticalAlignment="Top" Click="BTN_Encode_Click">
+        <Button x:Name="BTN_Encode" Style="{StaticResource FSButton}" Height="20" Margin="427,165,0,0" Width="82" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BTN_Encode_Click">
             <Button.Content>
                 <DockPanel>
                     <fa5:IconBlock Icon="SyncAlt" Margin="0,1,5,0"/>
@@ -37,7 +37,7 @@
                 </DockPanel>
             </Button.Content>
         </Button>
-        <Button Style="{StaticResource IconButton}" x:Name="BTN_Exit" Margin="444,190,0,0" Width="82" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BTN_Exit_Click" d:LayoutOverrides="VerticalAlignment">
+        <Button x:Name="BTN_Exit" Style="{StaticResource FSButton}" Margin="427,190,0,0" Width="82" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BTN_Exit_Click">
             <Button.Content>
                 <DockPanel>
                     <fa5:IconBlock Icon="SignOutAlt" Margin="0,1,5,0"/>
@@ -46,8 +46,12 @@
             </Button.Content>
         </Button>
         <StatusBar Margin="0,0,0,0" Background="Transparent" Height="23" VerticalAlignment="Bottom">
-            <StatusBarItem Content="Ready" />
+            <Grid>
+                <ProgressBar x:Name="DisplayStatusProgressBar" Width="100" Maximum="100" Minimum="0"/>
+                <StatusBarItem x:Name="DisplayStatusPerc" Content="" Margin="0,0,0,0" Padding="0" HorizontalAlignment="Center" />
+            </Grid>
             <Separator Margin="5,5,5,5" Width="1" HorizontalAlignment="Left"/>
+            <StatusBarItem x:Name="DisplayStatus" Content="Ready" />
         </StatusBar>
     </Grid>
 </Window>

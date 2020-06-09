@@ -25,12 +25,18 @@ namespace FlacSquisher
             [Description("OPUS")]
             OPUS,
         }
+        public class EncodeProgress
+        {
+            public string Text { get; set; }
+            public double Percentage { get; set; }
+        }
         public class MP3
         {
             Bitrates Bitrate { get; set; }
             string InputPath { get; set; }
             string OutputPath { get; set; }
             LameConfig LConfig { get; set; }
+            private IProgress<EncodeProgress> InternalProgress;
             public enum Bitrates
             {
                 [Description("320")]
@@ -52,13 +58,13 @@ namespace FlacSquisher
                 [Description("32")]
                 _32
             }
-
-            public MP3(string inputPath, string outputPath, Bitrates bitrate = Bitrates._320, MPEGMode mPEGMode = MPEGMode.JointStereo)
+            public MP3(string inputPath, string outputPath, Bitrates bitrate = Bitrates._320, MPEGMode mPEGMode = MPEGMode.JointStereo, IProgress<EncodeProgress> progress = null)
             {
                 this.Bitrate = bitrate;
                 this.InputPath = inputPath;
                 this.OutputPath = outputPath;
-
+                this.InternalProgress = progress;
+                
                 LConfig = new LameConfig()
                 {
                     BitRate = Convert.ToInt32(this.Bitrate.GetEnumDescription()),
@@ -71,6 +77,7 @@ namespace FlacSquisher
                 Task t = new Task(() =>
                 {
                     int fCount = Directory.GetFiles(this.InputPath, "*.flac").Length;
+                    int currFLAC = 0;
 
                     //Conversion
                     List<Task> tasks = new List<Task>();
@@ -79,7 +86,11 @@ namespace FlacSquisher
                         Task t = new Task(() =>
                         {
                             Stopwatch sWatch = new Stopwatch();
+                            //Reporting
                             Log.Information("[Encode][MP3][Process] Processing \"" + Path.GetFileNameWithoutExtension(flacFile) + "\"");
+                            double perc = Math.Round((double)(currFLAC * 100 / fCount), 2);
+                            this.InternalProgress.Report(new EncodeProgress() { Percentage = perc });
+                            //# ### #
                             sWatch.Start();
                             byte[] flacBuffer;
                             using (FlacReader flacReader = new FlacReader(flacFile))
@@ -106,12 +117,6 @@ namespace FlacSquisher
                             
                             //TODO: User defined Tags like, mood, original composer, etc.
 
-                            //TODO: Create a folder.jpg when not found - out of a files embedded picture
-                            //using (FileStream fStream = File.Create(Path.Combine(this.OutputPath, Path.GetFileNameWithoutExtension(flacFile) + "." + MimeTypesMap.GetExtension(r.Pictures.Values.ElementAt(0).MIMEType)), r.Pictures.Values.ElementAt(0).PictureData.Length, FileOptions.SequentialScan))
-                            //{
-                            //    fStream.Write(r.Pictures.Values.ElementAt(0).PictureData, 0, r.Pictures.Values.ElementAt(0).PictureData.Length);
-                            //}
-
                             using (LameMP3FileWriter lameMP3FileWriter = new LameMP3FileWriter(Path.Combine(this.OutputPath, Path.GetFileNameWithoutExtension(flacFile) + ".mp3"), new NAudio.Wave.WaveFormat(), LConfig))
                             {
                                 using StreamWriter streamWriter = new StreamWriter(lameMP3FileWriter);
@@ -120,7 +125,12 @@ namespace FlacSquisher
                             flacBuffer = null;
 
                             sWatch.Stop();
+                            //Reporting
                             Log.Information("[Encode][MP3][Process] \"" + Path.GetFileNameWithoutExtension(flacFile) + "\" Processing finished - Duration: " + sWatch.Elapsed.ToString(@"hh\:mm\:ss\:fffffff"));
+                            currFLAC -= -1;
+                            perc = Math.Round((double)(currFLAC * 100 / fCount), 2);
+                            this.InternalProgress.Report(new EncodeProgress() { Percentage = perc });
+                            //# ### #
                         });
                         tasks.Add(t);
                     }

@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:FlacSquisher"
              StartupUri="Windows/MainWindow.xaml">
     <Application.Resources>
-        <Style x:Key="IconButton" TargetType="{x:Type Button}">
+        <Style x:Key="FSButton" TargetType="{x:Type Button}">
             <Setter Property="Foreground">
                 <Setter.Value>
                     <SolidColorBrush Color="#333333"/>
@@ -21,14 +21,14 @@
                         </Border>
 
                         <ControlTemplate.Triggers>
-                            <!-- TODO: Stylesheet -->
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="BBorder" Property="BorderBrush" Value="#AAAAAA" />
-                                <Setter TargetName="BBorder" Property="Background" Value="LightBlue"/>
+                                <Setter TargetName="BBorder" Property="BorderBrush" Value="#999999" />
+                                <Setter TargetName="BBorder" Property="Background" Value="#ADD8E6"/>
+                                <Setter TargetName="BBorder" Property="BorderBrush" Value="#444444"/>
                             </Trigger>
 
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="OrangeRed" />
+                                <Setter TargetName="BBorder" Property="Background" Value="#7CB2C3"/>
                                 <Setter Property="Foreground" Value="White" />
                             </Trigger>
                         </ControlTemplate.Triggers>

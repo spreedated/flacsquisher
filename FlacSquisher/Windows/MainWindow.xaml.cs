@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -81,6 +82,8 @@ namespace FlacSquisher
             BTN_Encode.IsEnabled = false;
             BTN_Exit.IsEnabled = false;
 
+            DisplayStatus.Content = "Processing files...";
+
             Stopwatch sWatch = new Stopwatch();
             Log.Information("[MainWindow][BTN_Encode_Click] Starting processing files...");
             sWatch.Start();
@@ -88,7 +91,7 @@ namespace FlacSquisher
             {
                 case Encode.AudioEncoders.MP3:
                     Encode.MP3.Bitrates selectedBitrate = Enum.GetValues(typeof(Encode.MP3.Bitrates)).OfType<Encode.MP3.Bitrates>().Where((x) => { return x.GetEnumDescription().Equals(UserC_MP3.CMB_MP3_Bitrate.SelectedItem.ToString()); }).FirstOrDefault();
-                    Encode.MP3 k = new Encode.MP3(TXT_FLACDirectory.Text, TXT_OutputDirectory.Text, selectedBitrate, (MPEGMode)UserC_MP3.CMB_MP3_Mode.SelectedItem);
+                    Encode.MP3 k = new Encode.MP3(TXT_FLACDirectory.Text, TXT_OutputDirectory.Text, selectedBitrate, (MPEGMode)UserC_MP3.CMB_MP3_Mode.SelectedIndex, new Progress<Encode.EncodeProgress>((x)=> { DisplayStatusPerc.Content = x.Percentage.ToString() + "%"; DisplayStatusProgressBar.Value = x.Percentage; }));
                     await k.Process();
                     break;
                 case Encode.AudioEncoders.WAVE:
@@ -114,8 +117,15 @@ namespace FlacSquisher
             UserC_MP3.IsEnabled = true;
             BTN_Encode.IsEnabled = true;
             BTN_Exit.IsEnabled = true;
+
+            DisplayStatus.Content = "Finished - Process duration: " + sWatch.Elapsed.ToString(@"hh\:mm\:ss\:ff");
+            Task wD = new Task(() => { Thread.Sleep(10000); });
+            wD.Start();
+            await wD;
+            DisplayStatus.Content = "Ready";
+            DisplayStatusProgressBar.Value = 0;
+            DisplayStatusPerc.Content = "";
         }
-        
         private void BTN_Change_Directory_Click(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;

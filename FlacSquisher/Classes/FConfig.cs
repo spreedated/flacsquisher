@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -17,6 +18,8 @@ namespace FlacSquisher
         public Encode.AudioEncoders LastEncoder { get; set; } = Encode.AudioEncoders.MP3;
         [JsonProperty("mp3settings")]
         public MP3 MP3Settings { get; set; } = new MP3();
+        [JsonProperty("options")]
+        public Options FSOptions { get; set; } = new Options();
         [JsonProperty("configCreated")]
         public DateTime ConfigCreated { get; set; }
         [JsonProperty("configModified")]
@@ -32,11 +35,18 @@ namespace FlacSquisher
             [JsonProperty("lMP3Mode")]
             public MPEGMode LastMP3Mode { get; set; } = MPEGMode.JointStereo;
         }
+        public class Options
+        {
+            [JsonProperty("filesExclude")]
+            public List<string> FilesExclude { get; set; }
+            [JsonProperty("filesInclude")]
+            public List<string> FilesInclude { get; set; }
+        }
     }
 
     public static class FSConfig
     {
-        public static Version ConfigVersion = new Version(1, 0, 0, 1);
+        public static Version ConfigVersion = new Version(1, 0, 0, 2);
         public static FSConfigJObject Config { get; set; } = null;
     }
 
@@ -104,17 +114,27 @@ namespace FlacSquisher
             if (fresh)
             {
                 Log.Information("[FConfig][Save] Brand new config to save");
-                FSConfig.Config = new FSConfigJObject
+                FSConfig.Config = new FSConfigJObject() //Set default Settings
                 {
                     ConfigCreated = DateTime.Now
                 };
+                FSConfig.Config.FSOptions.FilesExclude = new List<string>() { "txt", "log", "pdf", "cue", "mp3", "mp4", "flv" };
+                FSConfig.Config.FSOptions.FilesInclude = new List<string>() { "png", "jpg" }; ;
             }
             FSConfig.Config.ConfigModified = DateTime.Now;
             string jsonOut = JsonConvert.SerializeObject(FSConfig.Config, Formatting.Indented);
             try
             {
+                //Truncate File before write
+                // - Prevents byte-artifact when bytes-to-write < old-bytes
+                if (File.Exists(jsonPath))
+                {
+                    File.Open(jsonPath, FileMode.Truncate).Close(); 
+                }
+                //# ### #
                 using FileStream stream = File.Open(jsonPath, FileMode.OpenOrCreate);
                 using StreamWriter writer = new StreamWriter(stream);
+                
                 writer.Write(jsonOut);
                 Log.Information("[FConfig][Save] Save successfully!");
             }

@@ -7,7 +7,7 @@
         xmlns:uc="clr-namespace:FlacSquisher.UserControls"
         xmlns:fa5="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="535" WindowStartupLocation="CenterScreen" Closing="Window_Closing" Padding="0">
+        Title="MainWindow" Height="450" Width="535" WindowStartupLocation="CenterScreen" Closing="Window_Closing" Padding="0" ResizeMode="NoResize" Loaded="Window_Loaded">
     <Grid>
         <Grid x:Name="MainGrid" Height="420" VerticalAlignment="Top" Margin="0,0,0,0">
             <GroupBox x:Name="GRP_Directories" Header="Directories" Height="110" Width="410" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">

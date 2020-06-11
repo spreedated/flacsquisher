@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FlacSquisher.Windows"
         xmlns:fa5="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
-        Title="Options" Height="446" Width="450" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+        Title="Options" Height="446" Width="450" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" ShowInTaskbar="False">
     <Grid>
         <GroupBox Header="Additional files" Height="123" VerticalAlignment="Top" Margin="10,10,0,0" HorizontalAlignment="Left" Width="420" d:LayoutOverrides="VerticalAlignment">
             <Grid>

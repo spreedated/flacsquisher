@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FlacSquisher.Windows"
         xmlns:fa5="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
-        Title="VersionCheck" Height="370" Width="350" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+        Title="VersionCheck" Height="370" Width="350" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" ShowInTaskbar="False">
     <Grid>
         <TextBlock x:Name="TXB_SomeCoolText" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Width="250" Height="30"/>
         <GroupBox x:Name="GRP_Results" Header="Results" Margin="10,45,10,35" d:LayoutOverrides="Height">

@@ -26,8 +26,8 @@ namespace FlacSquisher
             //# ### #
             Enum.GetValues(typeof(Encode.AudioEncoders)).OfType<Encode.AudioEncoders>().All((x) => { CMB_Encoder.Items.Add(x.GetEnumDescription()); return true; });
             CMB_Encoder.SelectedIndex = (int)FSConfig.Config.LastEncoder;
-            TXT_FLACDirectory.Text = FSConfig.Config.LastInputDirectory;
-            TXT_OutputDirectory.Text = FSConfig.Config.LastOutputDirectory;
+            TXT_FLACDirectory.DataContext = FSConfig.Config;
+            TXT_OutputDirectory.DataContext = FSConfig.Config;
             if (FSConfig.Config.FSOptions.CheckForUpdateOnStartup)
             {
                 Update upd = new Update();
@@ -35,8 +35,8 @@ namespace FlacSquisher
                 upd.StartupCheck();
             }
 #if DEBUG
-            TXT_FLACDirectory.Text = "C:\\Users\\SpReeD\\Desktop\\fTest\\";
-            TXT_OutputDirectory.Text = "C:\\Users\\SpReeD\\Desktop\\fTest\\out\\";
+            FSConfig.Config.LastInputDirectory = "C:\\Users\\SpReeD\\Desktop\\fTest\\";
+            FSConfig.Config.LastOutputDirectory = "C:\\Users\\SpReeD\\Desktop\\fTest\\out\\";
 #endif
         }
         private void Upd_GotResponse(object sender, EventArgsResponse e)

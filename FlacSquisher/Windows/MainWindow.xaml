@@ -19,10 +19,10 @@
                 <GroupBox x:Name="GRP_Directories" Header="Directories" Height="110" Width="410" Margin="10,13,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Grid>
                         <Label Content="FLAC Directory" Width="304" Height="20" HorizontalAlignment="Left" Margin="2,2,0,0" VerticalAlignment="Top" Padding="0"/>
-                        <TextBox x:Name="TXT_FLACDirectory" Text="" Margin="2,22,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="351" />
+                        <TextBox x:Name="TXT_FLACDirectory" Text="{Binding Path=LastInputDirectory}" Margin="2,22,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="351"/>
                         <Button x:Name="BTN_Change_FLACDirectory" Style="{StaticResource FSButton}" Content="{fa5:Icon FolderOpen, Foreground=Black}" Height="20" Margin="358,22,0,0" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BTN_Change_Directory_Click" />
                         <Label Content="Output Directory" Width="304" Height="20" HorizontalAlignment="Left" Margin="2,42,0,0" VerticalAlignment="Top" Padding="0"/>
-                        <TextBox x:Name="TXT_OutputDirectory" Text="" Margin="2,62,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="351" />
+                        <TextBox x:Name="TXT_OutputDirectory" Text="{Binding Path=LastOutputDirectory}" Margin="2,62,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="351" />
                         <Button x:Name="BTN_Change_OutputDirectory" Style="{StaticResource FSButton}" Content="{fa5:Icon FolderOpen, Foreground=Black}" Height="20" Margin="358,62,0,0" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BTN_Change_Directory_Click"/>
                     </Grid>
                 </GroupBox>

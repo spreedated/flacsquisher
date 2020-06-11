@@ -30,7 +30,7 @@ namespace FlacSquisher.Windows
         {
             InitializeComponent();
             FSConfig.Config.FSOptions.FilesInclude.All(x => { LSB_FileInclude.Items.Add(x); return true; });
-            CHK_UpdateStartup.IsChecked = FSConfig.Config.FSOptions.CheckForUpdateOnStartup;
+            CHK_UpdateStartup.DataContext = FSConfig.Config.FSOptions;
         }
         #region "Buttons"
         private void BTN_Cancel_Click(object sender, RoutedEventArgs e)
@@ -68,8 +68,6 @@ namespace FlacSquisher.Windows
             LSB_FileInclude.Items.OfType<string>().All(x => { acc.Add(x); return true; });
             FSConfig.Config.FSOptions.FilesInclude = acc.ToList<string>();
             acc = null;
-
-            FSConfig.Config.FSOptions.CheckForUpdateOnStartup = (bool)CHK_UpdateStartup.IsChecked;
 
             FConfig.Save();
             this.Close();

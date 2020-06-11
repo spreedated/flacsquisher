@@ -60,11 +60,11 @@ namespace FlacSquisher
                 return;
             }
 
-            if (Assembly.GetExecutingAssembly().GetName().Version < this.GitHubResponse.Version)
+            if (Assembly.GetExecutingAssembly().GetName().Version < new Version(this.GitHubResponse.Version.Major, this.GitHubResponse.Version.Minor, this.GitHubResponse.Version.Build,0))
             {
                 GotResponse(this, new EventArgsResponse() { Response = "New version available! - " + this.GitHubResponse.Version.ToString()});
             }
-            else if (Assembly.GetExecutingAssembly().GetName().Version > this.GitHubResponse.Version)
+            else if (Assembly.GetExecutingAssembly().GetName().Version > new Version(this.GitHubResponse.Version.Major, this.GitHubResponse.Version.Minor, this.GitHubResponse.Version.Build, 0))
             {
                 GotResponse(this, new EventArgsResponse() { Response = "You have a newer version than online!" });
             }

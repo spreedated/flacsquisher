@@ -31,6 +31,11 @@
                                 <Setter TargetName="BBorder" Property="Background" Value="#7CB2C3"/>
                                 <Setter Property="Foreground" Value="White" />
                             </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="#CCCCCC"/>
+                                <Setter TargetName="BBorder" Property="BorderBrush" Value="#999999"/>
+                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>

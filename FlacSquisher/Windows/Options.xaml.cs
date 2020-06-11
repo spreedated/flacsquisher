@@ -1,17 +1,10 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Windows.Interop;
-using System.Runtime.InteropServices;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Interop;
 
 namespace FlacSquisher.Windows
 {
@@ -36,34 +29,13 @@ namespace FlacSquisher.Windows
         public Options()
         {
             InitializeComponent();
-            FSConfig.Config.FSOptions.FilesExclude.All(x => { LSB_FileExclude.Items.Add(x); return true; });
             FSConfig.Config.FSOptions.FilesInclude.All(x => { LSB_FileInclude.Items.Add(x); return true; });
+            CHK_UpdateStartup.IsChecked = FSConfig.Config.FSOptions.CheckForUpdateOnStartup;
         }
         #region "Buttons"
         private void BTN_Cancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-        }
-        #endregion
-        private void BTN_FileExclude_Add_Click(object sender, RoutedEventArgs e)
-        {
-            if (TXT_Fileexts.Text != null && TXT_Fileexts.Text.Length > 0)
-            {
-                //Add Item to TOP of the list
-                List<string> acc = new List<string>() { TXT_Fileexts.Text.TrimStart('*').TrimStart('.') };
-                LSB_FileExclude.Items.OfType<string>().All(x => { acc.Add(x); return true; });
-                LSB_FileExclude.Items.Clear();
-                acc.OfType<string>().All(x => { LSB_FileExclude.Items.Add(x); return true; });
-                acc = null;
-                TXT_Fileexts.Text = null;
-            }
-        }
-        private void BTN_FileExclude_Delete_Click(object sender, RoutedEventArgs e)
-        {
-            if (LSB_FileExclude.SelectedIndex > -1)
-            {
-                LSB_FileExclude.Items.Remove(LSB_FileExclude.SelectedItem);
-            }
         }
 
         private void BTN_FileInclude_Add_Click(object sender, RoutedEventArgs e)
@@ -84,20 +56,38 @@ namespace FlacSquisher.Windows
         {
             if (LSB_FileInclude.SelectedIndex > -1)
             {
+                int selItem = LSB_FileInclude.SelectedIndex;
                 LSB_FileInclude.Items.Remove(LSB_FileInclude.SelectedItem);
+                LSB_FileInclude.SelectedIndex = selItem;
             }
         }
 
         private void BTN_Save_Click(object sender, RoutedEventArgs e)
         {
             List<string> acc = new List<string>();
-            LSB_FileExclude.Items.OfType<string>().All(x=> { acc.Add(x); return true; });
-            FSConfig.Config.FSOptions.FilesExclude = acc.ToList<string>();
-            acc.Clear();
             LSB_FileInclude.Items.OfType<string>().All(x => { acc.Add(x); return true; });
             FSConfig.Config.FSOptions.FilesInclude = acc.ToList<string>();
             acc = null;
+
+            FSConfig.Config.FSOptions.CheckForUpdateOnStartup = (bool)CHK_UpdateStartup.IsChecked;
+
             FConfig.Save();
+            this.Close();
         }
+
+        private void BTN_Default_Click(object sender, RoutedEventArgs e)
+        {
+            LSB_FileInclude.Items.Clear();
+            LSB_FileInclude.Items.Add("png");
+            LSB_FileInclude.Items.Add("jpg");
+            CHK_UpdateStartup.IsChecked = true;
+        }
+
+        private void BTN_Update_Click(object sender, RoutedEventArgs e)
+        {
+            VersionCheck versionCheck = new VersionCheck();
+            versionCheck.ShowDialog();
+        }
+        #endregion
     }
 }

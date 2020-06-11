@@ -99,22 +99,22 @@ namespace FlacSquisher
                                 streamReader.BaseStream.Read(flacBuffer, 0, flacBuffer.Length);
                             }
 
-                            LibFlacSharp.FlacFile r = new LibFlacSharp.FlacFile(flacFile);
-                            LibFlacSharp.Metadata.VorbisComment s = r.VorbisComment;
+                            using (LibFlacSharp.FlacFile r = new LibFlacSharp.FlacFile(flacFile)) { 
+                                LibFlacSharp.Metadata.VorbisComment s = r.VorbisComment;
 
-                            LConfig.ID3 = new ID3TagData()
-                            {
-                                Artist = s.CommentList.Where(x => x.Key.ToLower().StartsWith("artist")).FirstOrDefault().Value,
-                                AlbumArtist = s.CommentList.Where(x => x.Key.ToLower().Contains("album") && x.Key.ToLower().Contains("artist")).FirstOrDefault().Value,
-                                Album = s.CommentList.Where(x => x.Key.ToLower().StartsWith("album") && x.Key.ToLower().EndsWith("album")).FirstOrDefault().Value,
-                                Title = s.CommentList.Where(x => x.Key.ToLower().StartsWith("title")).FirstOrDefault().Value,
-                                Year = s.CommentList.Where(x => x.Key.ToLower().StartsWith("date")).FirstOrDefault().Value,
-                                Track = s.CommentList.Where(x => x.Key.ToLower().StartsWith("tracknumber")).FirstOrDefault().Value,
-                                Genre = s.CommentList.Where(x => x.Key.ToLower().StartsWith("genre")).FirstOrDefault().Value,
-                                Comment = s.CommentList.Where(x => x.Key.ToLower().Contains("comment")).FirstOrDefault().Value,
-                                AlbumArt = r.Pictures.Count() > 0 ? r.Pictures.Values.ElementAt(0).PictureData : null
-                            };
-
+                                LConfig.ID3 = new ID3TagData()
+                                {
+                                    Artist = s.CommentList.Where(x => x.Key.ToLower().StartsWith("artist")).FirstOrDefault().Value,
+                                    AlbumArtist = s.CommentList.Where(x => x.Key.ToLower().Contains("album") && x.Key.ToLower().Contains("artist")).FirstOrDefault().Value,
+                                    Album = s.CommentList.Where(x => x.Key.ToLower().StartsWith("album") && x.Key.ToLower().EndsWith("album")).FirstOrDefault().Value,
+                                    Title = s.CommentList.Where(x => x.Key.ToLower().StartsWith("title")).FirstOrDefault().Value,
+                                    Year = s.CommentList.Where(x => x.Key.ToLower().StartsWith("date")).FirstOrDefault().Value,
+                                    Track = s.CommentList.Where(x => x.Key.ToLower().StartsWith("tracknumber")).FirstOrDefault().Value,
+                                    Genre = s.CommentList.Where(x => x.Key.ToLower().StartsWith("genre")).FirstOrDefault().Value,
+                                    Comment = s.CommentList.Where(x => x.Key.ToLower().Contains("comment")).FirstOrDefault().Value,
+                                    AlbumArt = r.Pictures.Count() > 0 ? r.Pictures.Values.ElementAt(0).PictureData : null
+                                };
+                            }
                             //TODO: User defined Tags like, mood, original composer, etc.
 
                             using (LameMP3FileWriter lameMP3FileWriter = new LameMP3FileWriter(Path.Combine(this.OutputPath, Path.GetFileNameWithoutExtension(flacFile) + ".mp3"), new NAudio.Wave.WaveFormat(), LConfig))
@@ -208,7 +208,7 @@ namespace FlacSquisher
         //TODO: Implement OPUS Encoding
         public static void CopyNonAudioFiles(string inputFolder, string outputFolder)
         {
-            foreach (string f in Directory.GetFiles(inputFolder).Where(x => { return !x.EndsWith(".flac"); }))
+            foreach (string f in Directory.GetFiles(inputFolder).Where(x => { return !x.EndsWith(".flac") && FSConfig.Config.FSOptions.FilesInclude.Any(y => '.' + y == Path.GetExtension(x)); }))
             {
                 Stopwatch sWatch = new Stopwatch();
                 Log.Information("[Encode][CopyNonAudioFiles] Copying \"" + Path.GetFileName(f) + "\"");

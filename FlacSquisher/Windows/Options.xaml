@@ -8,22 +8,30 @@
         mc:Ignorable="d"
         Title="Options" Height="446" Width="450" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Grid>
-        <GroupBox Header="Additional files" Height="205" VerticalAlignment="Top" Margin="10,10,0,0" HorizontalAlignment="Left" Width="420" d:LayoutOverrides="VerticalAlignment">
+        <GroupBox Header="Additional files" Height="123" VerticalAlignment="Top" Margin="10,10,0,0" HorizontalAlignment="Left" Width="420" d:LayoutOverrides="VerticalAlignment">
             <Grid>
-                <Label Content="File extensions to ignore" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" d:LayoutOverrides="VerticalAlignment"/>
-                <Button x:Name="BTN_FileExclude_Add" Style="{StaticResource FSButton}" Content="{fa5:Icon Plus, Foreground=DarkGreen}" Height="20" Margin="110,36,0,0" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" d:LayoutOverrides="HorizontalAlignment" Click="BTN_FileExclude_Add_Click"/>
-                <TextBox x:Name="TXT_Fileexts" Height="20" Margin="75,36,303,0" VerticalAlignment="Top" MaxLength="3"/>
-                <ListBox x:Name="LSB_FileExclude" VerticalAlignment="Top" HorizontalAlignment="Left" Width="209" Margin="154,23,0,0" Height="68"/>
-                <Button x:Name="BTN_FileExclude_Delete" Style="{StaticResource FSButton}" Content="{fa5:Icon Minus, Foreground=DarkRed}" Height="20" Margin="368,67,0,0" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BTN_FileExclude_Delete_Click"/>
-                <Label Content="File extensions to copy" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,100,0,0" d:LayoutOverrides="VerticalAlignment"/>
-                <Button x:Name="BTN_FileInclude_Add" Style="{StaticResource FSButton}" Content="{fa5:Icon Plus, Foreground=DarkGreen}" Height="20" Margin="110,126,0,0" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" d:LayoutOverrides="HorizontalAlignment" Click="BTN_FileInclude_Add_Click"/>
-                <TextBox x:Name="TXT_Fileinc" Height="20" Margin="75,126,303,0" VerticalAlignment="Top" MaxLength="3"/>
-                <ListBox x:Name="LSB_FileInclude" VerticalAlignment="Top" HorizontalAlignment="Left" Width="209" Margin="154,113,0,0" Height="68"/>
-                <Button x:Name="BTN_FileInclude_Delete" Style="{StaticResource FSButton}" Content="{fa5:Icon Minus, Foreground=DarkRed}" Height="20" Margin="368,157,0,0" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BTN_FileInclude_Delete_Click"/>
+                <Label Content="File extensions to copy" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" d:LayoutOverrides="VerticalAlignment"/>
+                <Button x:Name="BTN_FileInclude_Add" Style="{StaticResource FSButton}" Content="{fa5:Icon Plus, Foreground=DarkGreen}" Height="20" Margin="110,36,0,0" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" d:LayoutOverrides="HorizontalAlignment" Click="BTN_FileInclude_Add_Click"/>
+                <TextBox x:Name="TXT_Fileinc" Height="20" Margin="75,36,303,0" VerticalAlignment="Top" MaxLength="3"/>
+                <ListBox x:Name="LSB_FileInclude" VerticalAlignment="Top" HorizontalAlignment="Left" Width="209" Margin="154,23,0,0" Height="68"/>
+                <Button x:Name="BTN_FileInclude_Delete" Style="{StaticResource FSButton}" Content="{fa5:Icon Minus, Foreground=DarkRed}" Height="20" Margin="368,67,0,0" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BTN_FileInclude_Delete_Click"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Updates" Height="62" VerticalAlignment="Top" Margin="10,138,0,0" HorizontalAlignment="Left" Width="420" d:LayoutOverrides="VerticalAlignment">
+            <Grid>
+                <CheckBox x:Name="CHK_UpdateStartup" Content="Check for updates on startup" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"></CheckBox>
+                <Button x:Name="BTN_Update" Style="{StaticResource FSButton}" Height="20" Margin="270,10,0,0" Width="128" HorizontalAlignment="Left" VerticalAlignment="Top" d:LayoutOverrides="VerticalAlignment" Click="BTN_Update_Click">
+                    <Button.Content>
+                        <DockPanel>
+                            <fa5:IconBlock Icon="LevelUpAlt" Margin="0,0,5,0"/>
+                            <TextBlock>Check for updates</TextBlock>
+                        </DockPanel>
+                    </Button.Content>
+                </Button>
             </Grid>
         </GroupBox>
         <Grid Margin="10,0,21,10" VerticalAlignment="Bottom">
-            <Button x:Name="BTN_Default" Style="{StaticResource FSButton}" Margin="10,0,0,0" Width="82" Height="20" HorizontalAlignment="Left" d:LayoutOverrides="Width">
+            <Button x:Name="BTN_Default" Style="{StaticResource FSButton}" Margin="10,0,0,0" Width="82" Height="20" HorizontalAlignment="Left" d:LayoutOverrides="Width" Click="BTN_Default_Click">
                 <Button.Content>
                     <DockPanel>
                         <fa5:IconBlock Icon="Outdent" Margin="0,1,5,0"/>

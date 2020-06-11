@@ -37,16 +37,16 @@ namespace FlacSquisher
         }
         public class Options
         {
-            [JsonProperty("filesExclude")]
-            public List<string> FilesExclude { get; set; }
             [JsonProperty("filesInclude")]
             public List<string> FilesInclude { get; set; }
+            [JsonProperty("updatecheckStartup")]
+            public bool CheckForUpdateOnStartup { get; set; } = true;
         }
     }
 
     public static class FSConfig
     {
-        public static Version ConfigVersion = new Version(1, 0, 0, 2);
+        public static Version ConfigVersion = new Version(1, 0, 0, 4);
         public static FSConfigJObject Config { get; set; } = null;
     }
 
@@ -114,12 +114,7 @@ namespace FlacSquisher
             if (fresh)
             {
                 Log.Information("[FConfig][Save] Brand new config to save");
-                FSConfig.Config = new FSConfigJObject() //Set default Settings
-                {
-                    ConfigCreated = DateTime.Now
-                };
-                FSConfig.Config.FSOptions.FilesExclude = new List<string>() { "txt", "log", "pdf", "cue", "mp3", "mp4", "flv" };
-                FSConfig.Config.FSOptions.FilesInclude = new List<string>() { "png", "jpg" }; ;
+                DefaultConfig();
             }
             FSConfig.Config.ConfigModified = DateTime.Now;
             string jsonOut = JsonConvert.SerializeObject(FSConfig.Config, Formatting.Indented);
@@ -143,6 +138,14 @@ namespace FlacSquisher
                 readOnlyFileSystem = true;
                 Log.Error(ex, "[FConfig][Save] Error: ");
             }
+        }
+        public static void DefaultConfig()
+        {
+            FSConfig.Config = new FSConfigJObject()
+            {
+                ConfigCreated = DateTime.Now
+            };
+            FSConfig.Config.FSOptions.FilesInclude = new List<string>() { "png", "jpg" };
         }
     }
 }

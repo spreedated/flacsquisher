@@ -1,0 +1,71 @@
+﻿<Window x:Class="FlacSquisher.Windows.VersionCheck"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FlacSquisher.Windows"
+        xmlns:fa5="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        mc:Ignorable="d"
+        Title="VersionCheck" Height="370" Width="350" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" ShowInTaskbar="False" Style="{StaticResource FSWindow}" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+    <Grid>
+        <TextBlock x:Name="TXB_SomeCoolText" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,10,0,0" Width="312" Height="30"/>
+        <GroupBox x:Name="GRP_Wait" Header="Please Wait..." Margin="10,45,10,35" d:LayoutOverrides="Height">
+            <Image gif:ImageBehavior.AnimatedSource="/Resources/Ripple-1s-200px.gif" gif:ImageBehavior.AnimateInDesignMode="True" HorizontalAlignment="Center" VerticalAlignment="Center" Height="150" Width="150" />
+        </GroupBox>
+        <GroupBox x:Name="GRP_Results" Header="Results" Margin="10,45,10,35" d:LayoutOverrides="Height">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="116"/>
+                    <ColumnDefinition Width="142"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <Label Content="Your version:" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Grid>
+                        <Label Content="Version:"/>
+                        <Label x:Name="LBL_CurrVers" Content="#.#.#.#" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="0,0,-45,0">
+                    <Label Content="Online version:" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Grid>
+                        <Label Content="Version:"/>
+                        <Label x:Name="LBL_OnVers" Content="#.#.#.#" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    </Grid>
+                    <Grid>
+                        <Label Content="Branch:"/>
+                        <Label x:Name="LBL_OnBranch" Content="###" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    </Grid>
+                    <Grid>
+                        <Label Content="Published:"/>
+                        <Label x:Name="LBL_OnDate" Content="##.##.####" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    </Grid>
+                    <Grid>
+                        <Label Content="Size:"/>
+                        <Label x:Name="LBL_OnSize" Content="## MB" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    </Grid>
+                    <Grid Height="120">
+                        <Label Content="Description:" Margin="0,0,0,0"/>
+                        <Label x:Name="LBL_OnDesc" Content="##############" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,15,0,0" Height="105" Width="184"/>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <Button x:Name="BTN_Cool" Style="{StaticResource FSButton}" Margin="10,0,0,10" Width="82" Height="20" HorizontalAlignment="Left" Click="BTN_Cool_Click" VerticalAlignment="Bottom" d:LayoutOverrides="Height">
+            <Button.Content>
+                <DockPanel>
+                    <fa5:IconBlock Icon="ThumbsUp" Margin="0,1,5,0"/>
+                    <TextBlock>Cool!</TextBlock>
+                </DockPanel>
+            </Button.Content>
+        </Button>
+        <Button x:Name="BTN_Download" Style="{StaticResource FSButton}" Margin="0,0,10,10" Width="100" Height="20" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:LayoutOverrides="Height" Click="BTN_Download_Click">
+            <Button.Content>
+                <DockPanel>
+                    <fa5:IconBlock Icon="Download" Margin="0,1,5,0"/>
+                    <TextBlock>Download</TextBlock>
+                </DockPanel>
+            </Button.Content>
+        </Button>
+    </Grid>
+</Window>

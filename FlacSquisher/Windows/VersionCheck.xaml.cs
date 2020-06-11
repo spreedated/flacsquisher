@@ -53,11 +53,11 @@ namespace FlacSquisher.Windows
                 return;
             }
 
-            if (Assembly.GetExecutingAssembly().GetName().Version < UpdateObj.GitHubResponse.Version)
+            if (Assembly.GetExecutingAssembly().GetName().Version < new Version(UpdateObj.GitHubResponse.Version.Major, UpdateObj.GitHubResponse.Version.Minor, UpdateObj.GitHubResponse.Version.Build, 0))
             {
                 TXB_SomeCoolText.Text = "Good news!\nNew version available.";
             }
-            else if (Assembly.GetExecutingAssembly().GetName().Version > UpdateObj.GitHubResponse.Version)
+            else if (Assembly.GetExecutingAssembly().GetName().Version > new Version(UpdateObj.GitHubResponse.Version.Major, UpdateObj.GitHubResponse.Version.Minor, UpdateObj.GitHubResponse.Version.Build, 0))
             {
                 TXB_SomeCoolText.Text = "Cool!\nYou have a newer version than online. You wizard!";
                 BTN_Download.IsEnabled = false;

@@ -46,7 +46,7 @@ namespace FlacSquisher
 
     public static class FSConfig
     {
-        public static Version ConfigVersion = new Version(1, 0, 0, 4);
+        public static Version ConfigVersion = new Version(1, 0, 1, 0);
         public static FSConfigJObject Config { get; set; } = null;
     }
 

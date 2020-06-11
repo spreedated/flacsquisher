@@ -89,5 +89,10 @@ namespace FlacSquisher.Windows
             versionCheck.ShowDialog();
         }
         #endregion
+
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
     }
 }

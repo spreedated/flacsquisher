@@ -1,4 +1,5 @@
-﻿using NAudio.Lame;
+﻿using FlacSquisher.Windows;
+using NAudio.Lame;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -27,10 +28,20 @@ namespace FlacSquisher
             CMB_Encoder.SelectedIndex = (int)FSConfig.Config.LastEncoder;
             TXT_FLACDirectory.Text = FSConfig.Config.LastInputDirectory;
             TXT_OutputDirectory.Text = FSConfig.Config.LastOutputDirectory;
+            if (FSConfig.Config.FSOptions.CheckForUpdateOnStartup)
+            {
+                Update upd = new Update();
+                upd.GotResponse += Upd_GotResponse;
+                upd.StartupCheck();
+            }
 #if DEBUG
             TXT_FLACDirectory.Text = "C:\\Users\\SpReeD\\Desktop\\fTest\\";
             TXT_OutputDirectory.Text = "C:\\Users\\SpReeD\\Desktop\\fTest\\out\\";
 #endif
+        }
+        private void Upd_GotResponse(object sender, EventArgsResponse e)
+        {
+            DisplayUpdate.Content = e.Response;
         }
     }
 }

@@ -4,6 +4,25 @@
              xmlns:local="clr-namespace:FlacSquisher"
              StartupUri="Windows/MainWindow.xaml">
     <Application.Resources>
+        <Style x:Key="FSWindow" TargetType="{x:Type Window}">
+            <Setter Property="ResizeMode" Value="NoResize"/>
+            <Setter Property="WindowStyle" Value="None"/>
+            <Setter Property="AllowsTransparency" Value="True"/>
+            <Setter Property="Background" Value="Transparent"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Window}">
+                        <Border BorderThickness="1" CornerRadius="20" BorderBrush="#EEEEEE" Background="White">
+                            <Grid>
+                                <ContentPresenter Content="{TemplateBinding Content}"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
         <Style x:Key="FSButton" TargetType="{x:Type Button}">
             <Setter Property="Foreground">
                 <Setter.Value>

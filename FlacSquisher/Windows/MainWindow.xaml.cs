@@ -42,6 +42,11 @@ namespace FlacSquisher
         }
 
         #region "Buttons"
+        private void BTN_Update_Click(object sender, RoutedEventArgs e)
+        {
+            VersionCheck versionCheck = new VersionCheck();
+            versionCheck.ShowDialog();
+        }
         private void BTN_Options_Click(object sender, RoutedEventArgs e)
         {
             Options k = new Options();
@@ -184,6 +189,11 @@ namespace FlacSquisher
             UserC_WAVE.Visibility = UCVisibility ? Visibility.Visible : Visibility.Hidden;
         }
         #endregion
+
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
     }
 
 }

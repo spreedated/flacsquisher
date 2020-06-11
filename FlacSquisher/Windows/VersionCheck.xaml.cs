@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using Serilog;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Interop;
 
 namespace FlacSquisher.Windows
@@ -35,39 +25,56 @@ namespace FlacSquisher.Windows
             SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU);
         }
         #endregion
-        private string dlUrl = null;
+
+        private readonly Update UpdateObj = new Update();
         public VersionCheck()
         {
             InitializeComponent();
-            Update acc = new Update();
-            acc.OnlineCheck();
-            if (acc.GitHubResponse == null)
+            DoUpdateCheck();
+        }
+        private async void DoUpdateCheck()
+        {
+            GRP_Wait.Visibility = Visibility.Visible;
+            GRP_Results.Visibility = Visibility.Hidden;
+            Task t = new Task(() =>
+            {
+                UpdateObj.OnlineCheck();
+            });
+            t.Start();
+            await t;
+
+            if (UpdateObj.GitHubResponse == null)
             {
                 TXB_SomeCoolText.Text = "Some error occurred!\n\nCheck your internet connection and firewall.";
                 BTN_Download.IsEnabled = false;
+                BTN_Cool.Content = "Uncool";
                 GRP_Results.Visibility = Visibility.Hidden;
+                GRP_Wait.Visibility = Visibility.Hidden;
                 return;
             }
 
-            if (Assembly.GetExecutingAssembly().GetName().Version < acc.GitHubResponse.Version)
+            if (Assembly.GetExecutingAssembly().GetName().Version < UpdateObj.GitHubResponse.Version)
             {
                 TXB_SomeCoolText.Text = "Good news!\nNew version available.";
             }
-            else if (Assembly.GetExecutingAssembly().GetName().Version > acc.GitHubResponse.Version)
+            else if (Assembly.GetExecutingAssembly().GetName().Version > UpdateObj.GitHubResponse.Version)
             {
                 TXB_SomeCoolText.Text = "Cool!\nYou have a newer version than online. You wizard!";
+                BTN_Download.IsEnabled = false;
             }
             else
             {
                 TXB_SomeCoolText.Text = "No newer version\nYou are on the latest " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
             LBL_CurrVers.Content = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            LBL_OnVers.Content = acc.GitHubResponse.Version.ToString();
-            LBL_OnBranch.Content = acc.GitHubResponse.Branch;
-            LBL_OnDate.Content = acc.GitHubResponse.PublishDate.ToString();
-            LBL_OnDesc.Content = acc.GitHubResponse.Description;
-            LBL_OnSize.Content = ((double)acc.GitHubResponse.Files[0].Bytes / 1024 / 1024).ToString("#.00", System.Globalization.CultureInfo.InvariantCulture) + " MiB";
-            dlUrl = acc.GitHubResponse.Files[0].DownloadURL;
+            LBL_OnVers.Content = UpdateObj.GitHubResponse.Version.ToString();
+            LBL_OnBranch.Content = UpdateObj.GitHubResponse.Branch;
+            LBL_OnDate.Content = UpdateObj.GitHubResponse.PublishDate.ToString();
+            LBL_OnDesc.Content = UpdateObj.GitHubResponse.Description;
+            LBL_OnSize.Content = ((double)UpdateObj.GitHubResponse.Files[0].Bytes / 1024 / 1024).ToString("#.00", System.Globalization.CultureInfo.InvariantCulture) + " MiB";
+
+            GRP_Wait.Visibility = Visibility.Hidden;
+            GRP_Results.Visibility = Visibility.Visible;
         }
 
         private void BTN_Cool_Click(object sender, RoutedEventArgs e)
@@ -77,10 +84,12 @@ namespace FlacSquisher.Windows
 
         private void BTN_Download_Click(object sender, RoutedEventArgs e)
         {
-            if (dlUrl != null)
-            {
-                Process.Start(Update.GitHubAPILink);
-            }
+            UpdateObj.DownloadZIP();
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.DragMove();
         }
     }
 }

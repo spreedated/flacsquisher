@@ -5,10 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FlacSquisher.Windows"
         xmlns:fa5="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
-        Title="VersionCheck" Height="370" Width="350" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" ShowInTaskbar="False">
+        Title="VersionCheck" Height="370" Width="350" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" ShowInTaskbar="False" Style="{StaticResource FSWindow}" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Grid>
-        <TextBlock x:Name="TXB_SomeCoolText" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Width="250" Height="30"/>
+        <TextBlock x:Name="TXB_SomeCoolText" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,10,0,0" Width="312" Height="30"/>
+        <GroupBox x:Name="GRP_Wait" Header="Please Wait..." Margin="10,45,10,35" d:LayoutOverrides="Height">
+            <Image gif:ImageBehavior.AnimatedSource="/Resources/Ripple-1s-200px.gif" gif:ImageBehavior.AnimateInDesignMode="True" HorizontalAlignment="Center" VerticalAlignment="Center" Height="150" Width="150" />
+        </GroupBox>
         <GroupBox x:Name="GRP_Results" Header="Results" Margin="10,45,10,35" d:LayoutOverrides="Height">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -50,7 +54,7 @@
         <Button x:Name="BTN_Cool" Style="{StaticResource FSButton}" Margin="10,0,0,10" Width="82" Height="20" HorizontalAlignment="Left" Click="BTN_Cool_Click" VerticalAlignment="Bottom" d:LayoutOverrides="Height">
             <Button.Content>
                 <DockPanel>
-                    <fa5:IconBlock Icon="Untappd" Margin="0,1,5,0"/>
+                    <fa5:IconBlock Icon="ThumbsUp" Margin="0,1,5,0"/>
                     <TextBlock>Cool!</TextBlock>
                 </DockPanel>
             </Button.Content>

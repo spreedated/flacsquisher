@@ -7,7 +7,7 @@
 		<ApplicationIcon>Resources\FlacSquisherIcon.ico</ApplicationIcon>
 		<StartupObject>FlacSquisher.App</StartupObject>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
-		<Version>2.0.4.0</Version>
+		<Version>2.0.5.0</Version>
 		<Copyright>2020 Markus Karl Wackermann</Copyright>
 		<Description>FlacSquisher converts a library of Flac files to MP3, Opus, or Ogg Vorbis format, maintaining the directory structure in the original library. That way, you can maintain your Flac files for home listening, and easily convert them to MP3, Opus, or Ogg format for mobile use, where storage space is more often tightly constrained.</Description>
 		<Authors>Markus Karl Wackermann</Authors>
